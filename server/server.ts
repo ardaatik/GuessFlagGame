@@ -53,11 +53,11 @@ io.on("connection", (socket: Socket) => {
     io.in(room).emit("serverName", clientName, socket.id);
   });
 
-  socket.on("clientScore", (score) => {
+  socket.on("clientScore", (score, attempts) => {
     console.log(`Received score ${score} from ${socket.id}`);
 
     // Emit the score update to the opponent
-    socket.broadcast.emit("serverScore", score, socket.id);
+    socket.broadcast.emit("serverScore", score, attempts, socket.id);
   });
 
   // On connection, determine opponent's socket ID

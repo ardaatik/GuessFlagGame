@@ -1,118 +1,99 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
+import MistakeCounter from "../component/MistakeCounter";
 import { GlobalContext } from "../context/GlobalProvider";
-import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
-import * as io from "socket.io-client";
+import GameResult from "./GameResult";
 
-interface gameplayInterface {
-  name: string;
-  start: boolean;
-  room: string;
-  socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
-}
-
-const Gameplay = ({ name, start, socket, room }: gameplayInterface) => {
+const Gameplay = () => {
   const {
+    opponnentsAttempts,
     currentQuestion,
     guessTheAnswer,
     resetTheGame,
     initGameRound,
     results,
+    opponnentsName,
+    score,
+    IsStarted,
+    socket,
+    name,
+    room,
+    mistakes,
+    IsGameLost,
+    IsGameWon,
   } = useContext(GlobalContext);
-  const [score, setScore] = useState(0);
-  const scoreRef = useRef(0);
-  const [name2, setName2] = useState("");
 
   useEffect(() => {
     resetTheGame();
     initGameRound();
     socket.emit("clientName", name, room);
-    // let isGameStarted = socket.emit("client_game_start", "1");
-    // console.log(isGameStarted);
-  }, [start, name2]);
-  useEffect(() => {
-    // Set up an event listener for the serverName event
-    socket.on("serverName", (name, socketId) => {
-      if (socket.id !== socketId) {
-        setName2(name);
-      }
-    });
+  }, [IsStarted]);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      socket.off("serverName");
-    };
-  }, [start, name2]);
+  const createArrayOfMistake = useMemo(
+    () => (mistake: number) => {
+      return Array(3)
+        .fill(true)
+        .map((_, i) => (mistake > i ? false : true));
+    },
+    [score]
+  );
 
-  useEffect(() => {
-    // Set up an event listener for the serverScore event
-    socket.on("serverScore", (score) => {
-      scoreRef.current = score;
-      setScore(score);
-    });
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      socket.off("serverScore");
-    };
-  }, [socket]);
-  return name2 ? (
+  return (
     <div className="game">
-      <div className="text-center game__container">
-        <div className="game__info">
-          <div className="game__info-score">
-            <div className="game__info-score-board game__info-score-board-1">
-              <p className="game__info-name">{name}</p>
-              <div className="game__info-score-point ">
-                Score: {results.score}
+      {IsGameLost || IsGameWon ? (
+        <GameResult
+          IsGameWon={IsGameWon}
+          score={results.score}
+          restartGame={resetTheGame}
+        />
+      ) : (
+        <div className="game__container">
+          <div className="game__info">
+            <div className="game__info__score">
+              <div className="game__info__mistake-counter game__info__mistake-counter-1">
+                <MistakeCounter mistakes={createArrayOfMistake(mistakes)} />
               </div>
-            </div>
-            <div className="game__mistake game__mistake-1">
-              <svg className="game__cross">
-                <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
-              </svg>
-              <svg className="game__cross">
-                <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
-              </svg>
-              <svg className="game__cross">
-                <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
-              </svg>
-            </div>
-            <div className="game__mistake game__mistake-2">
-              <svg className="game__cross">
-                <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
-              </svg>
-              <svg className="game__cross">
-                <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
-              </svg>
-              <svg className="game__cross">
-                <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
-              </svg>
-            </div>
-            <div className="game__info-score-board game__info-score-board-2">
-              <p className="game__info-name">{name2}</p>
-              <div className="game__info-score-point ">
-                Score: {scoreRef.current}
+              <div className="game__info__score-board game__info__score-board-1">
+                <p className="game__info__score-board-name">{name}</p>
+                <div className="game__info__score-board-point">
+                  Score: {results.score}
+                </div>
+              </div>
+
+              <div className="game__info__score-board game__info__score-board-2">
+                <p className="game__info__score-board-name">{opponnentsName}</p>
+
+                <div className="game__info__score-board-point ">
+                  Score: {score}
+                </div>
+              </div>
+              <div className="game__info__mistake-counter game__info__mistake-counter-2">
+                <MistakeCounter
+                  mistakes={createArrayOfMistake(opponnentsAttempts - score)}
+                />
               </div>
             </div>
           </div>
+
+          <img
+            className="game__img"
+            src={`../../node_modules/flag-icons/flags/4x3/${currentQuestion.flagUrl}.svg`}
+          />
+
+          {currentQuestion.options.map((option, idx) => (
+            <button
+              className="game__button"
+              key={`option-${idx}`}
+              value={option}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                guessTheAnswer((e.target as HTMLInputElement).value, socket);
+              }}
+            >
+              {option}
+            </button>
+          ))}
         </div>
-        <img className="game__img" src={currentQuestion.flagUrl} />
-        {currentQuestion.options.map((option, idx) => (
-          <button
-            className="game__button"
-            key={`option-${idx}`}
-            value={option}
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              guessTheAnswer((e.target as HTMLInputElement).value, socket);
-            }}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
+      )}
     </div>
-  ) : (
-    <></>
   );
 };
 

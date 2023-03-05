@@ -32,27 +32,29 @@ const StartGame = ({
           </p>
         </div>
       </div>
-      <input
-        className="game__submit-input"
-        onChange={(e) => {
-          setRoom(e.target.value);
-        }}
-      />
+      <div className="home__submit-block">
+        <input
+          className="game__submit-input"
+          onChange={(e) => {
+            setRoom(e.target.value);
+          }}
+        />
 
-      <button
-        type="button"
-        className="home__button"
-        onClick={() => {
-          setOpenInput(true);
-          socket.emit("joinRoom", room);
-          socket.emit("client_game_start", room);
-        }}
-      >
-        <svg className="home__button-icon icon-play2">
-          <use xlinkHref="./src/style/assets/sprite.svg#icon-play2" />
-        </svg>
-        Start Game
-      </button>
+        <button
+          type="button"
+          className="home__button"
+          onClick={() => {
+            setOpenInput(true);
+            socket.emit("joinRoom", room);
+            socket.emit("client_game_start", room);
+          }}
+        >
+          <svg className="home__button-icon icon-play2">
+            <use xlinkHref="./src/style/assets/sprite.svg#icon-play2" />
+          </svg>
+          Start Game
+        </button>
+      </div>
     </div>
   );
 };

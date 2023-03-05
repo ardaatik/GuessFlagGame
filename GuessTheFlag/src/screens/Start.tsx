@@ -1,36 +1,20 @@
-import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
-import { useState, useEffect } from "react";
-import * as io from "socket.io-client";
+import { useState, useContext } from "react";
 import EnterGame from "../component/EnterGame";
-import InGame from "../component/InGame";
-const socket: io.Socket<ServerToClientEvents, ClientToServerEvents> =
-  io.connect("http://localhost:3000");
+import { GlobalContext } from "../context/GlobalProvider";
+import { useNavigate } from "react-router-dom";
 
 const Start = () => {
-  const [room, setRoom] = useState("");
-  const [name, setName] = useState("");
+  const { setName, room, setRoom, socket } = useContext(GlobalContext);
+
   const [openInput, setOpenInput] = useState(false);
-  const [gameStart, setGameStart] = useState(false);
-  const [gameOn, setGameOn] = useState(false);
-
-  useEffect(() => {
-    socket.on("server_game_start", (start: boolean) => {
-      console.log(socket.id);
-      setGameStart(start);
-    });
-
-    return () => {
-      socket.off("server_game_start");
-    };
-  }, [gameStart]);
+  const navigate = useNavigate();
 
   const handleStart = (e: React.FormEvent<EventTarget>) => {
     e.preventDefault();
-    socket.emit("clientName", name, room);
     console.log("sending name ");
-    setGameOn(true);
+    navigate("/start");
   };
-  return !gameOn ? (
+  return (
     <EnterGame
       openInput={openInput}
       setName={setName}
@@ -40,8 +24,6 @@ const Start = () => {
       setOpenInput={setOpenInput}
       setRoom={setRoom}
     />
-  ) : (
-    <InGame socket={socket} room={room} name={name} gameStart={gameStart} />
   );
 };
 

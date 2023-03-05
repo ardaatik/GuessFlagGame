@@ -1,20 +1,14 @@
-import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
-import * as io from "socket.io-client";
 import Gameplay from "../screens/Gameplay";
+import { useContext } from "react";
+import { GlobalContext } from "../context/GlobalProvider";
 
-interface InGameInterface {
-  socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
-  name: string;
-  gameStart: boolean;
-  room: string;
-}
-
-const InGame = ({ room, gameStart, name, socket }: InGameInterface) => {
-  return gameStart ? (
-    <Gameplay name={name} start={gameStart} socket={socket} room={room} />
+const InGame = () => {
+  const { IsStarted, opponnentsName } = useContext(GlobalContext);
+  return IsStarted && opponnentsName ? (
+    <Gameplay />
   ) : (
     <div className="game">
-      <>Loading...</>
+      <div className="game__loading">Loading...</div>
     </div>
   );
 };

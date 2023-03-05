@@ -3,7 +3,6 @@ import NameForm from "./NameForm";
 import StartGame from "./StartGame";
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
 import * as io from "socket.io-client";
-
 interface EnterGameInterface {
   setRoom: React.Dispatch<React.SetStateAction<string>>;
   setOpenInput: React.Dispatch<React.SetStateAction<boolean>>;

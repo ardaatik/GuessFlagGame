@@ -10,6 +10,9 @@ import {
 import * as io from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
 
+const socket: io.Socket<ServerToClientEvents, ClientToServerEvents> =
+  io.connect("http://localhost:3000");
+
 export interface Country {
   name: string;
   code: string;
@@ -30,6 +33,19 @@ export interface Results {
 }
 
 export interface GlobalContextInterface {
+  opponnentsAttempts: number;
+  mistakes: number;
+  score: number;
+  room: string;
+  name: string;
+  opponnentsName: string;
+  IsStarted: boolean;
+  IsGameLost: boolean;
+  IsGameWon: boolean;
+  setIsStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
   currentQuestion: CurrentQuestion;
   results: Results;
   initGameRound: () => void;
@@ -56,8 +72,55 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     defaultCurrentQuestion
   );
 
+  const [room, setRoom] = useState("");
+  const [name, setName] = useState("");
+  const [opponnentsName, setOpponnentsName] = useState("");
+  const [IsStarted, setIsStarted] = useState(false);
+  const [score, setScore] = useState(0);
+  const [opponnentsAttempts, setOpponnentsAttempts] = useState(0);
+  const [IsGameLost, setIsGameLost] = useState(false);
+  const [IsGameWon, setIsGameWon] = useState(false);
+
   // State: past question result
   const [results, setResults] = useState<Results>(defaultResults);
+  const mistakes = results.attempts - results.score;
+  const opponnentsMistakes = opponnentsAttempts - score;
+
+  useEffect(() => {
+    socket.on("server_game_start", (start: boolean) => {
+      console.log(socket.id, "server game started called");
+      setIsStarted(start);
+    });
+    socket.on("serverName", (name, socketId) => {
+      console.log(socket.id, "server name called");
+
+      if (socket.id !== socketId) {
+        setOpponnentsName(name);
+      }
+    });
+    socket.on("serverScore", (score, attempts) => {
+      console.log(socket.id, "server score called");
+      setScore(score);
+      setOpponnentsAttempts(attempts);
+    });
+
+    return () => {
+      socket.off("server_game_start");
+      socket.off("serverName");
+      socket.off("serverScore");
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    const MINIMUM_MISTAKES = 3;
+    if (mistakes >= MINIMUM_MISTAKES) {
+      setIsGameLost(true);
+    }
+
+    if (opponnentsMistakes >= MINIMUM_MISTAKES) {
+      setIsGameWon(true);
+    }
+  }, [mistakes, opponnentsMistakes]);
 
   // 1. Shuffled array of country names and their ISO alpha-2 code
   useEffect(() => {
@@ -67,6 +130,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   // 2. Each round of gameplay
   const initGameRound = () => {
     // select a random country
+
     const randomIndex = Math.floor(Math.random() * listOfCountries.length);
     const randomCountry = listOfCountries[randomIndex];
     // remove the random country selected from the list, to avoid duplicate question
@@ -89,7 +153,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     setCurrentQuestion((prevCurrentQuestion) => ({
       ...prevCurrentQuestion,
       answer: randomCountry.name,
-      flagUrl: `https://flagcdn.com/${randomCountry.code}.svg`,
+      flagUrl: `${randomCountry.code}`,
       options: options,
     }));
   };
@@ -102,15 +166,17 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     // increment the no. of attempts
     // set display of the results card to true
 
-    setResults((prevResults) => ({
-      ...prevResults,
-      show: true,
-      attempts: prevResults.attempts + 1,
-    }));
+    setResults((prevResults) => {
+      return {
+        ...prevResults,
+        show: true,
+        attempts: prevResults.attempts + 1,
+      };
+    });
     // if guess is correct, set results for correct guess
     if (guess === currentQuestion.answer) {
       setResults((prevResults) => {
-        socket.emit("clientScore", prevResults.score + 1);
+        socket.emit("clientScore", prevResults.score + 1, prevResults.attempts);
         return {
           ...prevResults,
           correct: true,
@@ -118,17 +184,18 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
           previousQuestion: { ...currentQuestion },
         };
       });
-    } else {
-      socket.emit("clientScore", results.score);
     }
     // if guess is wrong, set results for wrong guess
     if (guess !== currentQuestion.answer) {
       // console.log("wrong");
-      setResults((prevResults) => ({
-        ...prevResults,
-        correct: false,
-        previousQuestion: { ...currentQuestion },
-      }));
+      setResults((prevResults) => {
+        socket.emit("clientScore", prevResults.score, prevResults.attempts);
+        return {
+          ...prevResults,
+          correct: false,
+          previousQuestion: { ...currentQuestion },
+        };
+      });
     }
 
     initGameRound();
@@ -137,6 +204,10 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   // 4. Reset the listOfCountries, score, and attempts
 
   const resetTheGame = () => {
+    setIsGameWon(false);
+    setIsGameLost(false);
+    setOpponnentsAttempts(0);
+    setScore(0);
     setListOfCountries(shuffle([...countries]));
     setResults(defaultResults);
     initGameRound();
@@ -145,6 +216,19 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   return (
     <GlobalContext.Provider
       value={{
+        IsGameLost,
+        IsGameWon,
+        opponnentsAttempts,
+        mistakes,
+        score,
+        IsStarted,
+        setIsStarted,
+        setRoom,
+        setName,
+        room,
+        name,
+        opponnentsName,
+        socket,
         currentQuestion,
         results,
         initGameRound,
