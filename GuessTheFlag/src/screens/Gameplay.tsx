@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import MistakeCounter from "../component/MistakeCounter";
 import { GlobalContext } from "../context/GlobalProvider";
 import GameResult from "./GameResult";
@@ -9,24 +9,16 @@ const Gameplay = () => {
     currentQuestion,
     guessTheAnswer,
     resetTheGame,
-    initGameRound,
     results,
     opponnentsName,
     score,
-    IsStarted,
     socket,
     name,
-    room,
     mistakes,
     IsGameLost,
     IsGameWon,
+    mistakenQuestions,
   } = useContext(GlobalContext);
-
-  useEffect(() => {
-    resetTheGame();
-    initGameRound();
-    socket.emit("clientName", name, room);
-  }, [IsStarted]);
 
   const createArrayOfMistake = useMemo(
     () => (mistake: number) => {
@@ -39,11 +31,15 @@ const Gameplay = () => {
 
   return (
     <div className="game">
-      {IsGameLost || IsGameWon ? (
+      {IsGameLost ? (
         <GameResult
           IsGameWon={IsGameWon}
           score={results.score}
+          opponnentsScore={score}
           restartGame={resetTheGame}
+          opponnentsAttempts={opponnentsAttempts}
+          createArrayOfMistake={createArrayOfMistake}
+          mistakenQuestions={mistakenQuestions}
         />
       ) : (
         <div className="game__container">

@@ -102,10 +102,7 @@
   { "name": "liechtenstein", "code": "li" },
   { "name": "lithuania", "code": "lt" },
   { "name": "luxembourg", "code": "lu" },
-  {
-    "name": "north macedonia (the republic of north macedonia)",
-    "code": "mk"
-  },
+  { "name": "north macedonia", "code": "mk" },
   { "name": "madagascar", "code": "mg" },
   { "name": "malawi", "code": "mw" },
   { "name": "malaysia", "code": "my" },

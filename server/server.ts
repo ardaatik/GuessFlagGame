@@ -34,6 +34,7 @@ io.on("connection", (socket: Socket) => {
       console.log(`Socket ${socket.id} full can't join room ${room}`);
     }
   });
+
   socket.on("client_game_start", (room) => {
     const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
     if (roomSize === 2) {
@@ -58,6 +59,11 @@ io.on("connection", (socket: Socket) => {
 
     // Emit the score update to the opponent
     socket.broadcast.emit("serverScore", score, attempts, socket.id);
+  });
+
+  socket.on("clientLeaveRoom", (room) => {
+    io.socketsLeave(room);
+    console.log(`Socket ${socket.id} left room ${room}`);
   });
 
   // On connection, determine opponent's socket ID

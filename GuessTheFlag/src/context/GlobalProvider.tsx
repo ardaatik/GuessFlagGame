@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode, useCallback } from "react";
 import countries from "../data/countries.json";
 import shuffle from "../utils/shuffle";
 import randomSelect from "../utils/randomSelect";
@@ -9,7 +9,6 @@ import {
 } from "../utils/defaultValues";
 import * as io from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
-
 const socket: io.Socket<ServerToClientEvents, ClientToServerEvents> =
   io.connect("http://localhost:3000");
 
@@ -33,6 +32,7 @@ export interface Results {
 }
 
 export interface GlobalContextInterface {
+  mistakenQuestions: CurrentQuestion[];
   opponnentsAttempts: number;
   mistakes: number;
   score: number;
@@ -80,53 +80,64 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [opponnentsAttempts, setOpponnentsAttempts] = useState(0);
   const [IsGameLost, setIsGameLost] = useState(false);
   const [IsGameWon, setIsGameWon] = useState(false);
+  const [mistakenQuestions, setMistakenQuestions] = useState<CurrentQuestion[]>(
+    []
+  );
 
   // State: past question result
   const [results, setResults] = useState<Results>(defaultResults);
   const mistakes = results.attempts - results.score;
   const opponnentsMistakes = opponnentsAttempts - score;
+  const MINIMUM_MISTAKES = 3;
 
-  useEffect(() => {
-    socket.on("server_game_start", (start: boolean) => {
-      console.log(socket.id, "server game started called");
-      setIsStarted(start);
-    });
-    socket.on("serverName", (name, socketId) => {
-      console.log(socket.id, "server name called");
-
-      if (socket.id !== socketId) {
-        setOpponnentsName(name);
-      }
-    });
-    socket.on("serverScore", (score, attempts) => {
-      console.log(socket.id, "server score called");
-      setScore(score);
-      setOpponnentsAttempts(attempts);
-    });
-
-    return () => {
-      socket.off("server_game_start");
-      socket.off("serverName");
-      socket.off("serverScore");
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    const MINIMUM_MISTAKES = 3;
+  const checkGameState = useCallback(() => {
     if (mistakes >= MINIMUM_MISTAKES) {
       setIsGameLost(true);
     }
-
     if (opponnentsMistakes >= MINIMUM_MISTAKES) {
       setIsGameWon(true);
     }
   }, [mistakes, opponnentsMistakes]);
-
-  // 1. Shuffled array of country names and their ISO alpha-2 code
   useEffect(() => {
+    const onGameStart = (start: boolean) => {
+      console.log(socket.id, "server game started called");
+      setIsStarted(start);
+    };
+    const onName: ServerToClientEvents["serverName"] = (name, socketId) => {
+      console.log(socket.id, "server name called");
+      if (socket.id !== socketId) {
+        setOpponnentsName(name);
+      }
+    };
+    const onScore: ServerToClientEvents["serverScore"] = (score, attempts) => {
+      console.log(socket.id, "server score called");
+      setScore(score);
+      setOpponnentsAttempts(attempts);
+    };
+
+    socket.on("server_game_start", onGameStart);
+    socket.on("serverName", onName);
+    socket.on("serverScore", onScore);
+    return () => {
+      socket.off("server_game_start", onGameStart);
+      socket.off("serverName", onName);
+      socket.off("serverScore", onScore);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    // 1. Shuffled array of country names and their ISO alpha-2 code
     setListOfCountries(shuffle([...countries]));
+    console.log(listOfCountries);
+
+    return () => {};
   }, []);
 
+  useEffect(() => {
+    checkGameState();
+  }, [checkGameState]);
+
+  // rest of the component code
   // 2. Each round of gameplay
   const initGameRound = () => {
     // select a random country
@@ -135,16 +146,20 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const randomCountry = listOfCountries[randomIndex];
     // remove the random country selected from the list, to avoid duplicate question
     setListOfCountries((listOfCountries) => {
-      let array = [...listOfCountries];
-      array.splice(randomIndex, 1);
-      return array;
+      return [
+        ...listOfCountries.slice(0, randomIndex),
+        ...listOfCountries.slice(randomIndex + 1),
+      ];
     });
 
     // select three country, extract the names,  and set options, including the answer
-    let threeRandomCountries = randomSelect(countries, 3).map(
+    let threeRandomCountries = randomSelect(listOfCountries, 3).map(
       (each: Country) => each.name
     );
-
+    if (threeRandomCountries.includes(randomCountry.name)) {
+      // if answer is already included in options, remove it from threeRandomCountries
+      console.log(threeRandomCountries, "burda buldum orospu cocugunu!");
+    }
     let options = [...threeRandomCountries, randomCountry.name];
     // shuffle the options
 
@@ -196,6 +211,11 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
           previousQuestion: { ...currentQuestion },
         };
       });
+      // adding the mistaken questions to show in results
+      setMistakenQuestions((prevQuestions) => [
+        ...prevQuestions,
+        currentQuestion,
+      ]);
     }
 
     initGameRound();
@@ -210,12 +230,13 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     setScore(0);
     setListOfCountries(shuffle([...countries]));
     setResults(defaultResults);
-    initGameRound();
+    setMistakenQuestions([]);
   };
 
   return (
     <GlobalContext.Provider
       value={{
+        mistakenQuestions,
         IsGameLost,
         IsGameWon,
         opponnentsAttempts,
