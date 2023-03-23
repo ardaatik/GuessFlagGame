@@ -1,8 +1,7 @@
 export interface ServerToClientEvents {
-  serverMsg: (data: { msg: string; room: string }) => void;
+  serverGameStart: (start: boolean) => void;
   serverName: (name: string, socketId: string) => void;
   serverScore: (score: number, attempts: number) => void;
-  server_game_start: (start: boolean) => void;
   serverLeaveRoom: (room: string) => void;
 }
 

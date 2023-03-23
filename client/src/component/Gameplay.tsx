@@ -11,7 +11,7 @@ const Gameplay = () => {
     resetTheGame,
     results,
     opponnentsName,
-    score,
+    opponnentsScore,
     socket,
     name,
     mistakes,
@@ -26,7 +26,7 @@ const Gameplay = () => {
         .fill(true)
         .map((_, i) => (mistake > i ? false : true));
     },
-    [score]
+    [opponnentsScore]
   );
 
   return (
@@ -35,7 +35,7 @@ const Gameplay = () => {
         <GameResult
           IsGameWon={IsGameWon}
           score={results.score}
-          opponnentsScore={score}
+          opponnentsScore={opponnentsScore}
           restartGame={resetTheGame}
           opponnentsAttempts={opponnentsAttempts}
           createArrayOfMistake={createArrayOfMistake}
@@ -59,12 +59,14 @@ const Gameplay = () => {
                 <p className="game__info__score-board-name">{opponnentsName}</p>
 
                 <div className="game__info__score-board-point ">
-                  Score: {score}
+                  Score: {opponnentsScore}
                 </div>
               </div>
               <div className="game__info__mistake-counter game__info__mistake-counter-2">
                 <MistakeCounter
-                  mistakes={createArrayOfMistake(opponnentsAttempts - score)}
+                  mistakes={createArrayOfMistake(
+                    opponnentsAttempts - opponnentsScore
+                  )}
                 />
               </div>
             </div>

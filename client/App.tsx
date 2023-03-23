@@ -1,4 +1,4 @@
-import Start from "./src/screens/Start";
+import Start from "./src/component/Start";
 import GlobalProvider from "./src/context/GlobalProvider";
 import "./src/style/index.scss";
 import { Route, Routes } from "react-router-dom";

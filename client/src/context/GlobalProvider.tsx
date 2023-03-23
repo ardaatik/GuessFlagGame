@@ -9,6 +9,8 @@ import {
 } from "../utils/defaultValues";
 import * as io from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
+import useListOfCountries from "../hook/useListOfCountries";
+import useSocket from "../hook/useSocket";
 const socket: io.Socket<ServerToClientEvents, ClientToServerEvents> =
   io.connect("http://localhost:3000");
 
@@ -35,7 +37,7 @@ export interface GlobalContextInterface {
   mistakenQuestions: CurrentQuestion[];
   opponnentsAttempts: number;
   mistakes: number;
-  score: number;
+  opponnentsScore: number;
   room: string;
   name: string;
   opponnentsName: string;
@@ -66,7 +68,6 @@ export const GlobalContext =
 
 const GlobalProvider = ({ children }: GlobalProviderProps) => {
   // State: list of countries
-  const [listOfCountries, setListOfCountries] = useState<Country[]>([]);
   // State: current question
   const [currentQuestion, setCurrentQuestion] = useState<CurrentQuestion>(
     defaultCurrentQuestion
@@ -74,12 +75,12 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
 
   const [room, setRoom] = useState("");
   const [name, setName] = useState("");
-  const [opponnentsName, setOpponnentsName] = useState("");
+  const [opponnentsName, setOpponentName] = useState("");
   const [IsStarted, setIsStarted] = useState(false);
-  const [score, setScore] = useState(0);
-  const [opponnentsAttempts, setOpponnentsAttempts] = useState(0);
   const [IsGameLost, setIsGameLost] = useState(false);
   const [IsGameWon, setIsGameWon] = useState(false);
+  const [opponnentsScore, setOpponentScore] = useState(0);
+  const [opponnentsAttempts, setOpponentAttempts] = useState(0);
   const [mistakenQuestions, setMistakenQuestions] = useState<CurrentQuestion[]>(
     []
   );
@@ -87,7 +88,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   // State: past question result
   const [results, setResults] = useState<Results>(defaultResults);
   const mistakes = results.attempts - results.score;
-  const opponnentsMistakes = opponnentsAttempts - score;
+  const opponnentsMistakes = opponnentsAttempts - opponnentsScore;
   const MINIMUM_MISTAKES = 3;
 
   const checkGameState = useCallback(() => {
@@ -98,40 +99,26 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
       setIsGameWon(true);
     }
   }, [mistakes, opponnentsMistakes]);
-  useEffect(() => {
-    const onGameStart = (start: boolean) => {
-      console.log(socket.id, "server game started called");
-      setIsStarted(start);
-    };
-    const onName: ServerToClientEvents["serverName"] = (name, socketId) => {
-      console.log(socket.id, "server name called");
-      if (socket.id !== socketId) {
-        setOpponnentsName(name);
-      }
-    };
-    const onScore: ServerToClientEvents["serverScore"] = (score, attempts) => {
-      console.log(socket.id, "server score called");
-      setScore(score);
-      setOpponnentsAttempts(attempts);
-    };
 
-    socket.on("server_game_start", onGameStart);
-    socket.on("serverName", onName);
-    socket.on("serverScore", onScore);
-    return () => {
-      socket.off("server_game_start", onGameStart);
-      socket.off("serverName", onName);
-      socket.off("serverScore", onScore);
-    };
-  }, [socket]);
+  useSocket(socket, "serverGameStart", (start) => {
+    console.log(socket.id, "server game started called");
+    setIsStarted(start);
+  });
 
-  useEffect(() => {
-    // 1. Shuffled array of country names and their ISO alpha-2 code
-    setListOfCountries(shuffle([...countries]));
-    console.log(listOfCountries);
+  useSocket(socket, "serverName", (name, socketId) => {
+    console.log(socket.id, "server name called");
+    if (socket.id !== socketId) {
+      setOpponentName(name);
+    }
+  });
 
-    return () => {};
-  }, []);
+  useSocket(socket, "serverScore", (score, attempts) => {
+    console.log(socket.id, "server score called");
+    setOpponentScore(score);
+    setOpponentAttempts(attempts);
+  });
+
+  const { listOfCountries, setListOfCountries } = useListOfCountries();
 
   useEffect(() => {
     checkGameState();
@@ -226,8 +213,8 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const resetTheGame = () => {
     setIsGameWon(false);
     setIsGameLost(false);
-    setOpponnentsAttempts(0);
-    setScore(0);
+    setOpponentAttempts(0);
+    setOpponentScore(0);
     setListOfCountries(shuffle([...countries]));
     setResults(defaultResults);
     setMistakenQuestions([]);
@@ -241,7 +228,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
         IsGameWon,
         opponnentsAttempts,
         mistakes,
-        score,
+        opponnentsScore,
         IsStarted,
         setIsStarted,
         setRoom,

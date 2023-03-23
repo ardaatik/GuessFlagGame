@@ -1,4 +1,4 @@
-import Gameplay from "../screens/Gameplay";
+import Gameplay from "../component/Gameplay";
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 
@@ -14,9 +14,10 @@ const InGame = () => {
   } = useContext(GlobalContext);
 
   useEffect(() => {
-    resetTheGame();
     initGameRound();
+    resetTheGame();
     socket.emit("clientName", name, room);
+    return () => {};
   }, [IsStarted]);
 
   return IsStarted && opponnentsName ? (

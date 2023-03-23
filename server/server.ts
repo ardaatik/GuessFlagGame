@@ -38,7 +38,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("client_game_start", (room) => {
     const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
     if (roomSize === 2) {
-      io.in(room).emit("server_game_start", true);
+      io.in(room).emit("serverGameStart", true);
       console.log(`Socket ${socket.id} started room ${room}`);
     } else {
       console.log(`Socket ${socket.id} empty can't start room ${room}`);
