@@ -95,7 +95,11 @@ body {
   &__info {
     font-size: 2.5rem;
     color: black;
-    font-weight: 700;
+    font-weight: 600;
+    border: 3px solid #fff;
+    padding: 1.5rem 1rem;
+    border-radius: 3px;
+    font-family: "Bangers", sans-serif;
     &__score {
       display: flex;
       width: 46rem;
@@ -104,18 +108,20 @@ body {
         background: #33ccff;
         padding: 5px;
         flex: 0 0 40%;
-        box-shadow: 0 0 0.7rem rgba(255, 255, 255);
-        border: 3px solid #fff;
         display: flex;
         flex-direction: column;
+        font-size: 3rem;
+        letter-spacing: 0.3rem;
         &-1 {
-          border-radius: 5px 0 0 5px;
+          border-right: 1.5px solid #fff;
+          color: hsl(0, 80%, 60%);
         }
         &-2 {
-          border-radius: 0 5px 5px 0;
+          border-left: 1.5px solid #fff;
+          color: #0077ff;
         }
         &-name {
-          font-size: 2.5rem;
+          font-size: 3rem;
           text-transform: capitalize;
           margin-bottom: auto;
         }
@@ -127,12 +133,7 @@ body {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      &-1 {
-        margin-right: 2rem;
-      }
-      &-2 {
-        margin-left: 2rem;
-      }
+
       &-white {
         height: 2rem;
         width: 2rem;
@@ -226,7 +227,6 @@ body {
             color: #fff;
             text-transform: uppercase;
             box-sizing: border-box;
-            padding: 1rem;
           }
           &-0 {
             &[title]:hover::after {
@@ -263,10 +263,10 @@ body {
       border-radius: 1rem;
       margin-bottom: 1rem;
       &-1 {
-        color: #ff002a;
+        color: hsl(0, 80%, 60%);
       }
       &-2 {
-        color: #006eff;
+        color: #0077ff;
       }
     }
     &-btn {
@@ -302,7 +302,7 @@ body {
   }
   &__title {
     color: #238072;
-    font-size: 3.3rem;
+    font-size: 4.4rem;
     font-weight: 900;
     -webkit-text-stroke: 1.2px #fff;
     @media only screen and (max-width: $bp-smallest) {
@@ -354,14 +354,34 @@ body {
     border: none;
     background-color: transparent;
     font-weight: 700;
-    font-size: 2.5rem;
+    font-size: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
     &-icon {
-      height: 6rem;
-      width: 6rem;
+      height: 8rem;
+      width: 8rem;
       margin-right: 4rem;
     }
+
+    &-loading {
+      height: 48px;
+      width: 48px;
+      color: #5a5a5a;
+      position: relative;
+      display: inline-block;
+      border: 5px solid;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: rotate 1s linear infinite;
+    }
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

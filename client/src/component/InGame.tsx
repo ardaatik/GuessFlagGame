@@ -3,24 +3,17 @@ import { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 
 const InGame = () => {
-  const {
-    IsStarted,
-    opponnentsName,
-    resetTheGame,
-    initGameRound,
-    socket,
-    name,
-    room,
-  } = useContext(GlobalContext);
+  const { opponentsName, resetTheGame, initGameRound, socket, name, room } =
+    useContext(GlobalContext);
 
   useEffect(() => {
-    initGameRound();
-    resetTheGame();
+    // initGameRound();
+    // resetTheGame();
     socket.emit("clientName", name, room);
-    return () => {};
-  }, [IsStarted]);
+    socket.emit("client_game_start", room);
+  }, []);
 
-  return IsStarted && opponnentsName ? (
+  return opponentsName ? (
     <Gameplay />
   ) : (
     <div className="game">

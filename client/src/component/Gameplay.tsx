@@ -5,18 +5,18 @@ import GameResult from "./GameResult";
 
 const Gameplay = () => {
   const {
-    opponnentsAttempts,
+    opponentsAttempts,
     currentQuestion,
     guessTheAnswer,
     resetTheGame,
     results,
-    opponnentsName,
-    opponnentsScore,
+    opponentsName,
+    opponentsScore,
     socket,
     name,
     mistakes,
-    IsGameLost,
-    IsGameWon,
+    isGameLost,
+    isGameWon,
     mistakenQuestions,
   } = useContext(GlobalContext);
 
@@ -26,18 +26,18 @@ const Gameplay = () => {
         .fill(true)
         .map((_, i) => (mistake > i ? false : true));
     },
-    [opponnentsScore]
+    [opponentsScore]
   );
 
   return (
     <div className="game">
-      {IsGameLost ? (
+      {isGameLost ? (
         <GameResult
-          IsGameWon={IsGameWon}
+          IsGameWon={isGameWon}
           score={results.score}
-          opponnentsScore={opponnentsScore}
+          opponentsScore={opponentsScore}
           restartGame={resetTheGame}
-          opponnentsAttempts={opponnentsAttempts}
+          opponentsAttempts={opponentsAttempts}
           createArrayOfMistake={createArrayOfMistake}
           mistakenQuestions={mistakenQuestions}
         />
@@ -56,16 +56,16 @@ const Gameplay = () => {
               </div>
 
               <div className="game__info__score-board game__info__score-board-2">
-                <p className="game__info__score-board-name">{opponnentsName}</p>
+                <p className="game__info__score-board-name">{opponentsName}</p>
 
                 <div className="game__info__score-board-point ">
-                  Score: {opponnentsScore}
+                  Score: {opponentsScore}
                 </div>
               </div>
               <div className="game__info__mistake-counter game__info__mistake-counter-2">
                 <MistakeCounter
                   mistakes={createArrayOfMistake(
-                    opponnentsAttempts - opponnentsScore
+                    opponentsAttempts - opponentsScore
                   )}
                 />
               </div>

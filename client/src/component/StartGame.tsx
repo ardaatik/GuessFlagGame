@@ -1,19 +1,23 @@
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
 import * as io from "socket.io-client";
+import { useContext, useState } from "react";
+import { GlobalContext } from "../context/GlobalProvider";
 
 interface StartGameInterface {
-  setRoom: React.Dispatch<React.SetStateAction<string>>;
-  setOpenInput: React.Dispatch<React.SetStateAction<boolean>>;
-  room: string;
   socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
-const StartGame = ({
-  socket,
-  setOpenInput,
-  setRoom,
-  room,
-}: StartGameInterface) => {
+const StartGame = ({ socket }: StartGameInterface) => {
+  const { resetTheGame, initGameRound } = useContext(GlobalContext);
+  const [queueIsLoading, setQueueIsLoading] = useState(false);
+
+  const handleJoinMatch = () => {
+    socket.emit("clientJoinQueue");
+    setQueueIsLoading(true);
+    resetTheGame();
+    initGameRound();
+  };
+
   return (
     <div className="text-center home">
       <h3 className="home__title">Welcome to Guess The Flag</h3>
@@ -33,27 +37,20 @@ const StartGame = ({
         </div>
       </div>
       <div className="home__submit-block">
-        <input
-          className="game__submit-input"
-          onChange={(e) => {
-            setRoom(e.target.value);
-          }}
-        />
-
-        <button
-          type="button"
-          className="home__button"
-          onClick={() => {
-            setOpenInput(true);
-            socket.emit("joinRoom", room);
-            socket.emit("client_game_start", room);
-          }}
-        >
-          <svg className="home__button-icon icon-play2">
-            <use xlinkHref="./src/style/assets/sprite.svg#icon-play2" />
-          </svg>
-          Start Game
-        </button>
+        {!queueIsLoading ? (
+          <button
+            type="button"
+            className="home__button"
+            onClick={handleJoinMatch}
+          >
+            <svg className="home__button-icon icon-play2">
+              <use xlinkHref="./src/style/assets/sprite.svg#icon-play2" />
+            </svg>
+            Join Game
+          </button>
+        ) : (
+          <div className="home__button-loading"></div>
+        )}
       </div>
     </div>
   );

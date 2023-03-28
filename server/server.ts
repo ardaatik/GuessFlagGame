@@ -3,47 +3,47 @@ import { Server, Socket } from "socket.io";
 import { createServer } from "http";
 import cors from "cors";
 import { ClientToServerEvents, ServerToClientEvents } from "../typings";
+import { v4 } from "uuid";
 
 const app = express();
 app.use(cors());
 const server = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
-    origin: "http://127.0.0.1:5173",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
-app.set("io", io);
+const connected_queue = new Set<string>();
 
 io.on("connection", (socket: Socket) => {
-  let opponentSocketId: string;
+  socket.on("clientJoinQueue", () => {
+    if (!connected_queue.has(socket.id)) {
+      io.emit("serverJoinQueue", socket.id);
+    }
+    connected_queue.add(socket.id);
+    const room = v4();
+    if (connected_queue.size >= 2) {
+      // Get an array of two socket IDs
+      const socketIds = Array.from(connected_queue).slice(0, 2);
+      // Remove those IDs from the set
+      socketIds.forEach((id) => connected_queue.delete(id));
+      // Emit a message to the two players to start the game
+      socketIds.forEach((id) => io.to(id).emit("serverGameStart", room));
+      console.log(`${room} Game started with players ${socketIds.join(", ")}`);
+    } else {
+      console.log(`[${room} Waiting for more players...`);
+    }
+  });
 
   socket.on("joinRoom", (room) => {
     const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
-    console.log(roomSize);
-
-    if (roomSize === 0) {
-      socket.join(room);
-      console.log(`Socket ${socket.id} createad room ${room}`);
-    } else if (roomSize === 1) {
-      socket.join(room);
-      console.log(`Socket ${socket.id} joined room ${room}`);
-    } else {
-      socket.leave(room);
-      console.log(`Socket ${socket.id} full can't join room ${room}`);
-    }
+    console.log(roomSize, socket.id, "joined");
+    socket.join(room);
+    socket.data.room = room;
   });
 
-  socket.on("client_game_start", (room) => {
-    const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
-    if (roomSize === 2) {
-      io.in(room).emit("serverGameStart", true);
-      console.log(`Socket ${socket.id} started room ${room}`);
-    } else {
-      console.log(`Socket ${socket.id} empty can't start room ${room}`);
-    }
-  });
   socket.on("clientName", (name, room) => {
     const clientName = name.trim();
     console.log(`${socket.id} has set their name to ${clientName}`);
@@ -61,20 +61,15 @@ io.on("connection", (socket: Socket) => {
     socket.broadcast.emit("serverScore", score, attempts, socket.id);
   });
 
-  socket.on("clientLeaveRoom", (room) => {
-    io.socketsLeave(room);
-    console.log(`Socket ${socket.id} left room ${room}`);
-  });
-
-  // On connection, determine opponent's socket ID
-  if (io.sockets.sockets.size === 2) {
-    for (const otherSocket of io.sockets.sockets.values()) {
-      if (otherSocket !== socket) {
-        opponentSocketId = otherSocket.id;
-        break;
-      }
+  socket.on("disconnect", () => {
+    connected_queue.delete(socket.id);
+    const room = socket.data.room;
+    if (room) {
+      io.to(room).emit("serverLeaveRoom", room);
+      io.socketsLeave(room);
     }
-  }
+    console.log(`User disconnected: ${socket.id}`);
+  });
 });
 
 server.listen(3000, () => {

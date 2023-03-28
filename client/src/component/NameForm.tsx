@@ -3,9 +3,10 @@ import React from "react";
 interface NameForm {
   handleStart: (e: React.FormEvent<EventTarget>) => void;
   setName: React.Dispatch<React.SetStateAction<string>>;
+  name: string;
 }
 
-const NameForm = ({ handleStart, setName }: NameForm) => {
+const NameForm = ({ handleStart, setName, name }: NameForm) => {
   return (
     <div className="game">
       <form className="game__submit-form" onSubmit={handleStart}>
@@ -16,7 +17,11 @@ const NameForm = ({ handleStart, setName }: NameForm) => {
             setName(e.target.value);
           }}
         />
-        <button className="game__button" type="submit">
+        <button
+          className="game__button"
+          type="submit"
+          disabled={name === "" ? true : false}
+        >
           Enter Your Name
         </button>
       </form>

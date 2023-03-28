@@ -10,7 +10,7 @@ const App = () => {
     <GlobalProvider>
       <Routes>
         <Route path="/" element={<Start />} />
-        <Route path="/start" element={<InGame />} />
+        <Route path="/start/:roomId" element={<InGame />} />
       </Routes>
     </GlobalProvider>
   ); //return

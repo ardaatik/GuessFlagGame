@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode, useCallback } from "react";
+import React, { useState, ReactNode } from "react";
 import countries from "../data/countries.json";
 import shuffle from "../utils/shuffle";
 import randomSelect from "../utils/randomSelect";
@@ -10,7 +10,8 @@ import {
 import * as io from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
 import useListOfCountries from "../hook/useListOfCountries";
-import useSocket from "../hook/useSocket";
+import useGameState from "../hook/useGameState";
+import useSocketListeners from "../hook/useSocketListeners";
 const socket: io.Socket<ServerToClientEvents, ClientToServerEvents> =
   io.connect("http://localhost:3000");
 
@@ -34,17 +35,17 @@ export interface Results {
 }
 
 export interface GlobalContextInterface {
+  openInput: boolean;
+  setOpenInput: React.Dispatch<React.SetStateAction<boolean>>;
   mistakenQuestions: CurrentQuestion[];
-  opponnentsAttempts: number;
+  opponentsAttempts: number;
   mistakes: number;
-  opponnentsScore: number;
+  opponentsScore: number;
   room: string;
   name: string;
-  opponnentsName: string;
-  IsStarted: boolean;
-  IsGameLost: boolean;
-  IsGameWon: boolean;
-  setIsStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  opponentsName: string;
+  isGameLost: boolean;
+  isGameWon: boolean;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -72,60 +73,37 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [currentQuestion, setCurrentQuestion] = useState<CurrentQuestion>(
     defaultCurrentQuestion
   );
-
-  const [room, setRoom] = useState("");
   const [name, setName] = useState("");
-  const [opponnentsName, setOpponentName] = useState("");
-  const [IsStarted, setIsStarted] = useState(false);
-  const [IsGameLost, setIsGameLost] = useState(false);
-  const [IsGameWon, setIsGameWon] = useState(false);
-  const [opponnentsScore, setOpponentScore] = useState(0);
-  const [opponnentsAttempts, setOpponentAttempts] = useState(0);
   const [mistakenQuestions, setMistakenQuestions] = useState<CurrentQuestion[]>(
     []
   );
+  const [openInput, setOpenInput] = useState(false);
 
   // State: past question result
   const [results, setResults] = useState<Results>(defaultResults);
   const mistakes = results.attempts - results.score;
-  const opponnentsMistakes = opponnentsAttempts - opponnentsScore;
-  const MINIMUM_MISTAKES = 3;
 
-  const checkGameState = useCallback(() => {
-    if (mistakes >= MINIMUM_MISTAKES) {
-      setIsGameLost(true);
-    }
-    if (opponnentsMistakes >= MINIMUM_MISTAKES) {
-      setIsGameWon(true);
-    }
-  }, [mistakes, opponnentsMistakes]);
-
-  useSocket(socket, "serverGameStart", (start) => {
-    console.log(socket.id, "server game started called");
-    setIsStarted(start);
-  });
-
-  useSocket(socket, "serverName", (name, socketId) => {
-    console.log(socket.id, "server name called");
-    if (socket.id !== socketId) {
-      setOpponentName(name);
-    }
-  });
-
-  useSocket(socket, "serverScore", (score, attempts) => {
-    console.log(socket.id, "server score called");
-    setOpponentScore(score);
-    setOpponentAttempts(attempts);
-  });
+  const {
+    opponentsScore,
+    opponentsAttempts,
+    opponentsMistakes,
+    opponentsName,
+    room,
+    setOpponentScore,
+    setOpponentAttempts,
+    setOpponentName,
+    setRoom,
+  } = useSocketListeners(socket);
 
   const { listOfCountries, setListOfCountries } = useListOfCountries();
 
-  useEffect(() => {
-    checkGameState();
-  }, [checkGameState]);
+  const [isGameLost, isGameWon, setIsGameLost, setIsGameWon] = useGameState(
+    mistakes,
+    opponentsMistakes
+  );
 
   // rest of the component code
-  // 2. Each round of gameplay
+  // 2. Each round of game play
   const initGameRound = () => {
     // select a random country
 
@@ -145,7 +123,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     );
     if (threeRandomCountries.includes(randomCountry.name)) {
       // if answer is already included in options, remove it from threeRandomCountries
-      console.log(threeRandomCountries, "burda buldum orospu cocugunu!");
+      console.log(threeRandomCountries, "random country log");
     }
     let options = [...threeRandomCountries, randomCountry.name];
     // shuffle the options
@@ -223,26 +201,26 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   return (
     <GlobalContext.Provider
       value={{
-        mistakenQuestions,
-        IsGameLost,
-        IsGameWon,
-        opponnentsAttempts,
+        isGameLost,
+        isGameWon,
+        opponentsAttempts,
         mistakes,
-        opponnentsScore,
-        IsStarted,
-        setIsStarted,
-        setRoom,
-        setName,
+        mistakenQuestions,
+        opponentsScore,
+        listOfCountries,
         room,
         name,
-        opponnentsName,
+        opponentsName,
         socket,
         currentQuestion,
         results,
         initGameRound,
         resetTheGame,
         guessTheAnswer,
-        listOfCountries,
+        setRoom,
+        setName,
+        openInput,
+        setOpenInput,
       }}
     >
       {children}

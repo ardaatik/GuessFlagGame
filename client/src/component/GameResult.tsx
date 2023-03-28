@@ -5,8 +5,8 @@ import { CurrentQuestion } from "../context/GlobalProvider";
 interface GameResultInterface {
   IsGameWon: boolean;
   score: number;
-  opponnentsScore: number;
-  opponnentsAttempts: number;
+  opponentsScore: number;
+  opponentsAttempts: number;
   restartGame: () => void;
   createArrayOfMistake: (mistake: number) => boolean[];
   mistakenQuestions: CurrentQuestion[];
@@ -15,9 +15,9 @@ interface GameResultInterface {
 const GameResult = ({
   IsGameWon,
   score,
-  opponnentsScore,
+  opponentsScore,
   restartGame,
-  opponnentsAttempts,
+  opponentsAttempts,
   createArrayOfMistake,
   mistakenQuestions,
 }: GameResultInterface) => {
@@ -27,7 +27,7 @@ const GameResult = ({
       <div className="game__result">
         {IsGameWon && (
           <div className="game__result-text">
-            You {IsGameWon && score > opponnentsScore ? "Won!" : "Lost!"}
+            You {IsGameWon && score > opponentsScore ? "Won!" : "Lost!"}
           </div>
         )}
         <div className="game__result-mistakes">
@@ -54,7 +54,7 @@ const GameResult = ({
           <div className="game__result-mistakes-opponent">
             <MistakeCounter
               mistakes={createArrayOfMistake(
-                opponnentsAttempts - opponnentsScore
+                opponentsAttempts - opponentsScore
               )}
             />
           </div>
@@ -64,7 +64,7 @@ const GameResult = ({
             Player 1<div className="game__result-text">{score}</div>
           </div>
           <div className="game__result-scores-2">
-            Player 2<div className="game__result-text">{opponnentsScore}</div>
+            Player 2<div className="game__result-text">{opponentsScore}</div>
           </div>
         </div>
         <button

@@ -14,7 +14,7 @@ const MistakeCounter = ({ mistakes }: MistakeCounterInterface) => {
               : "game__info__mistake-counter-white"
           }
         >
-          <use xlinkHref="./src/style/assets/cross-sprite.svg#icon-cross" />
+          <use xlinkHref="/src/style/assets/cross-sprite.svg#icon-cross" />
         </svg>
       ))}
     </>

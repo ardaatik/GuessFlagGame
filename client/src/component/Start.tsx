@@ -1,18 +1,15 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import EnterGame from "../component/EnterGame";
 import { GlobalContext } from "../context/GlobalProvider";
-import { useNavigate } from "react-router-dom";
 
 const Start = () => {
-  const { setName, room, setRoom, socket } = useContext(GlobalContext);
-
-  const [openInput, setOpenInput] = useState(false);
-  const navigate = useNavigate();
+  const { setName, setRoom, socket, name, setOpenInput, openInput } =
+    useContext(GlobalContext);
 
   const handleStart = (e: React.FormEvent<EventTarget>) => {
     e.preventDefault();
+    setOpenInput(true);
     console.log("sending name ");
-    navigate("/start");
   };
   return (
     <EnterGame
@@ -20,9 +17,8 @@ const Start = () => {
       setName={setName}
       handleStart={handleStart}
       socket={socket}
-      room={room}
-      setOpenInput={setOpenInput}
       setRoom={setRoom}
+      name={name}
     />
   );
 };
