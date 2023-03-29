@@ -8,6 +8,7 @@ function useSocketListeners(
   const [opponentsScore, setOpponentScore] = useState(0);
   const [opponentsAttempts, setOpponentAttempts] = useState(0);
   const [opponentsName, setOpponentName] = useState("");
+  const [name, setName] = useState("");
   const [room, setRoom] = useState("");
   const opponentsMistakes = opponentsAttempts - opponentsScore;
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function useSocketListeners(
     const gameStartListener = (room: string) => {
       console.log(socket.id, "server game started called");
       setRoom(room);
-      socket.emit("joinRoom", room);
+      socket.emit("clientJoinRoom", room);
       navigate(`/start/${room}`);
     };
 
@@ -61,6 +62,8 @@ function useSocketListeners(
     setOpponentName,
     room,
     setRoom,
+    name,
+    setName,
   };
 }
 

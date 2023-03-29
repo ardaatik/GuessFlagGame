@@ -10,7 +10,7 @@ const useListOfCountries = () => {
   const [listOfCountries, setListOfCountries] = useState<Country[]>([]);
 
   useEffect(() => {
-    setListOfCountries(shuffle([...countries]));
+    setListOfCountries([...countries]);
     console.log(listOfCountries);
   }, []);
   return {

@@ -73,7 +73,6 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [currentQuestion, setCurrentQuestion] = useState<CurrentQuestion>(
     defaultCurrentQuestion
   );
-  const [name, setName] = useState("");
   const [mistakenQuestions, setMistakenQuestions] = useState<CurrentQuestion[]>(
     []
   );
@@ -89,10 +88,12 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     opponentsMistakes,
     opponentsName,
     room,
+    name,
     setOpponentScore,
     setOpponentAttempts,
     setOpponentName,
     setRoom,
+    setName,
   } = useSocketListeners(socket);
 
   const { listOfCountries, setListOfCountries } = useListOfCountries();
@@ -105,37 +106,29 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
   // rest of the component code
   // 2. Each round of game play
   const initGameRound = () => {
-    // select a random country
+    // select 4 random countries
 
-    const randomIndex = Math.floor(Math.random() * listOfCountries.length);
-    const randomCountry = listOfCountries[randomIndex];
-    // remove the random country selected from the list, to avoid duplicate question
-    setListOfCountries((listOfCountries) => {
-      return [
-        ...listOfCountries.slice(0, randomIndex),
-        ...listOfCountries.slice(randomIndex + 1),
-      ];
-    });
+    // pick one of the random countries as the answer
+    let { results, answer } = randomSelect(listOfCountries, 4, room);
 
-    // select three country, extract the names,  and set options, including the answer
-    let threeRandomCountries = randomSelect(listOfCountries, 3).map(
-      (each: Country) => each.name
-    );
-    if (threeRandomCountries.includes(randomCountry.name)) {
-      // if answer is already included in options, remove it from threeRandomCountries
-      console.log(threeRandomCountries, "random country log");
-    }
-    let options = [...threeRandomCountries, randomCountry.name];
+    // extract the names of the 4 random countries and set options, including the answer
+    const options = results.map((each) => each.name);
+
     // shuffle the options
+    const shuffledOptions = shuffle(options);
 
-    options = shuffle(options);
     // set questionAnswer, flagUrl, options
     setCurrentQuestion((prevCurrentQuestion) => ({
       ...prevCurrentQuestion,
-      answer: randomCountry.name,
-      flagUrl: `${randomCountry.code}`,
-      options: options,
+      answer: answer.name,
+      flagUrl: `${answer.code}`,
+      options: shuffledOptions,
     }));
+
+    // remove the random answer selected from the list, to avoid duplicate question
+    setListOfCountries((listOfCountries) => {
+      return listOfCountries.filter((country) => country !== answer);
+    });
   };
 
   // 3. Pick an option and check if option is the answer
@@ -193,7 +186,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     setIsGameLost(false);
     setOpponentAttempts(0);
     setOpponentScore(0);
-    setListOfCountries(shuffle([...countries]));
+    setListOfCountries([...countries]);
     setResults(defaultResults);
     setMistakenQuestions([]);
   };

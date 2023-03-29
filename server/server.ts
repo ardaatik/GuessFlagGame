@@ -19,9 +19,6 @@ const connected_queue = new Set<string>();
 
 io.on("connection", (socket: Socket) => {
   socket.on("clientJoinQueue", () => {
-    if (!connected_queue.has(socket.id)) {
-      io.emit("serverJoinQueue", socket.id);
-    }
     connected_queue.add(socket.id);
     const room = v4();
     if (connected_queue.size >= 2) {
@@ -37,9 +34,9 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  socket.on("joinRoom", (room) => {
+  socket.on("clientJoinRoom", (room) => {
     const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
-    console.log(roomSize, socket.id, "joined");
+    console.log(roomSize, "joined");
     socket.join(room);
     socket.data.room = room;
   });
@@ -48,7 +45,6 @@ io.on("connection", (socket: Socket) => {
     const clientName = name.trim();
     console.log(`${socket.id} has set their name to ${clientName}`);
     console.log(io.sockets.adapter.rooms);
-
     // Emit the serverName event to all clients, including the sender
     console.log(`in room => ${room} `);
     io.in(room).emit("serverName", clientName, socket.id);

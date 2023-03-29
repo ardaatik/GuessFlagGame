@@ -3,14 +3,15 @@ import { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 
 const InGame = () => {
-  const { opponentsName, resetTheGame, initGameRound, socket, name, room } =
+  const { opponentsName, socket, name, room, resetTheGame, initGameRound } =
     useContext(GlobalContext);
 
   useEffect(() => {
-    // initGameRound();
-    // resetTheGame();
+    console.log(room, "logging room from UseEffect");
+    resetTheGame();
+    initGameRound();
+    console.log("sending name again !!");
     socket.emit("clientName", name, room);
-    socket.emit("client_game_start", room);
   }, []);
 
   return opponentsName ? (

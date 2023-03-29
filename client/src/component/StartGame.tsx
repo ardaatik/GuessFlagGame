@@ -1,21 +1,17 @@
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
 import * as io from "socket.io-client";
-import { useContext, useState } from "react";
-import { GlobalContext } from "../context/GlobalProvider";
+import { useState } from "react";
 
 interface StartGameInterface {
   socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
 const StartGame = ({ socket }: StartGameInterface) => {
-  const { resetTheGame, initGameRound } = useContext(GlobalContext);
   const [queueIsLoading, setQueueIsLoading] = useState(false);
 
   const handleJoinMatch = () => {
     socket.emit("clientJoinQueue");
     setQueueIsLoading(true);
-    resetTheGame();
-    initGameRound();
   };
 
   return (
