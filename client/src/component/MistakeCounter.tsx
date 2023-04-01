@@ -1,3 +1,5 @@
+import svgIcons from "../style/assets/cross_sprite.svg";
+
 interface MistakeCounterInterface {
   mistakes: boolean[];
 }
@@ -10,11 +12,11 @@ const MistakeCounter = ({ mistakes }: MistakeCounterInterface) => {
           key={index}
           className={
             !item
-              ? "game__info__mistake-counter-red"
-              : "game__info__mistake-counter-white"
+              ? "score__board__mistakes-red"
+              : "score__board__mistakes-white"
           }
         >
-          <use xlinkHref="/src/style/assets/cross-sprite.svg#icon-cross" />
+          <use xlinkHref={svgIcons + "#icon-cross1"} />
         </svg>
       ))}
     </>

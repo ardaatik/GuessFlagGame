@@ -1,0 +1,98 @@
+.home {
+  min-width: 60vh;
+  height: 80vh;
+  font-size: 2rem;
+  background-color: #33ccff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 1rem;
+  @media only screen and (max-width: $bp-smallest) {
+    height: 100vh;
+  }
+  &__title {
+    color: #238072;
+    font-size: 4.4rem;
+    font-weight: 900;
+    -webkit-text-stroke: 1.2px #fff;
+    @media only screen and (max-width: $bp-smallest) {
+      display: none;
+    }
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &__container {
+      flex: 0 0 90%;
+      border-radius: 1rem;
+      outline: 1rem solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-width: 50vh;
+      @media only screen and (max-width: $bp-smallest) {
+        min-width: 40vh;
+      }
+      &-1 {
+        flex: 0 0 70%;
+        background-color: #d82227;
+        font-size: 4rem;
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      &-2 {
+        flex: 0 0 70%;
+        background-color: #ffe34a;
+        font-weight: 600;
+        font-size: 2.25rem;
+      }
+    }
+  }
+  &__submit {
+    &-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  &__button {
+    border: none;
+    background-color: transparent;
+    font-weight: 700;
+    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-icon {
+      height: 8rem;
+      width: 8rem;
+      margin-right: 4rem;
+    }
+
+    &-loading {
+      height: 48px;
+      width: 48px;
+      color: #5a5a5a;
+      position: relative;
+      display: inline-block;
+      border: 5px solid;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: rotate 1s linear infinite;
+    }
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

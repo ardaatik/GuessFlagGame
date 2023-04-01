@@ -91,7 +91,6 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     name,
     setOpponentScore,
     setOpponentAttempts,
-    setOpponentName,
     setRoom,
     setName,
   } = useSocketListeners(socket);

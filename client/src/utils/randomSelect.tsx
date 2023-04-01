@@ -20,7 +20,7 @@ const randomSelect = (array: Country[], n: number, seed: string) => {
   randomNumArray.forEach((key, idx) => (results[idx] = array[key]));
   const answer = results[Math.floor(rng() * results.length)];
   console.log(answer);
-  console.log(results);
+  console.log(...results);
   return { results, answer };
 };
 

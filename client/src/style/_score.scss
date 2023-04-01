@@ -1,0 +1,75 @@
+.score__board {
+  font-size: 2.5rem;
+  font-weight: 600;
+  padding: 1.5rem 1rem;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to right, #001133 50%, #93c4ec 50%);
+  text-align: center;
+  min-width: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Orbitron", sans-serif;
+  &-player1 {
+    color: #93c4ec;
+  }
+  &-player2 {
+    color: #001133;
+  }
+  &__container {
+    padding: 5px;
+    flex: 0 0 40%;
+    display: flex;
+    flex-direction: column;
+    font-size: 3rem;
+    letter-spacing: 0.1rem;
+
+    &-name {
+      font-size: 3rem;
+      text-transform: capitalize;
+      margin-bottom: auto;
+    }
+    &-score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &-icon {
+      height: 2.5rem;
+      width: 2.5rem;
+      margin-right: 0.5rem;
+      &1 {
+        fill: #93c4ec;
+      }
+      &2 {
+        fill: #001133;
+      }
+    }
+  }
+  &__mistakes {
+    width: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &-white {
+      height: 2rem;
+      width: 2rem;
+      fill: #fff;
+      &:not(:last-child) {
+        margin-bottom: 2rem;
+      }
+    }
+    &-red {
+      height: 2rem;
+      width: 2rem;
+      fill: #ff0000;
+      transition: all 0.2s;
+      transform: scale(1.15);
+      &:not(:last-child) {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}

@@ -23,7 +23,7 @@ const GameResult = ({
 }: GameResultInterface) => {
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="home">
       <div className="game__result">
         {IsGameWon && (
           <div className="game__result-text">

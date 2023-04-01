@@ -9,7 +9,6 @@ const Start = () => {
   const handleStart = (e: React.FormEvent<EventTarget>) => {
     e.preventDefault();
     setOpenInput(true);
-    console.log("sending name ");
   };
   return (
     <EnterGame
