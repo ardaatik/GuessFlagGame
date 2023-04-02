@@ -1,10 +1,10 @@
-import Gameplay from "../component/Gameplay";
+import Gameplay from "./Gameplay";
 import { useContext, useEffect, useMemo } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 import ScoreBoard from "./ScoreBoard";
 import GameResult from "./GameResult";
 
-const InGame = () => {
+const GamePlayScreen = () => {
   const {
     opponentsName,
     socket,
@@ -70,4 +70,4 @@ const InGame = () => {
   );
 };
 
-export default InGame;
+export default GamePlayScreen;

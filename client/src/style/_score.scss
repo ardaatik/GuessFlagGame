@@ -47,23 +47,23 @@
     }
   }
   &__mistakes {
-    width: 5rem;
+    width: 8rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
     &-white {
-      height: 2rem;
-      width: 2rem;
+      height: 2.25rem;
+      width: 2.25rem;
       fill: #fff;
       &:not(:last-child) {
         margin-bottom: 2rem;
       }
     }
     &-red {
-      height: 2rem;
-      width: 2rem;
+      height: 2.25rem;
+      width: 2.25rem;
       fill: #ff0000;
       transition: all 0.2s;
       transform: scale(1.15);

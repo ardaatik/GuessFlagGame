@@ -6,7 +6,7 @@ interface StartGameInterface {
   socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
-const StartGame = ({ socket }: StartGameInterface) => {
+const HomeScreen = ({ socket }: StartGameInterface) => {
   const [queueIsLoading, setQueueIsLoading] = useState(false);
 
   const handleJoinMatch = () => {
@@ -52,4 +52,4 @@ const StartGame = ({ socket }: StartGameInterface) => {
   );
 };
 
-export default StartGame;
+export default HomeScreen;

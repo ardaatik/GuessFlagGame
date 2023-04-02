@@ -7,18 +7,21 @@ const randomSelect = (array: Country[], n: number, seed: string) => {
 
   // create a seedrandom instance with the given seed
   const rng = seedrandom(seed);
-  console.log(rng());
 
-  for (let i = 1; i <= n; i++) {
-    let randomNum: number = Math.round(rng() * (array.length - 1));
+  // use seedrandom for the first random number
+  const firstRandomNum = Math.round(rng() * (array.length - 1));
+  randomNumArray.push(firstRandomNum);
+
+  for (let i = 2; i <= n; i++) {
+    let randomNum: number = Math.round(Math.random() * (array.length - 1));
     while (randomNumArray.includes(randomNum)) {
-      randomNum = Math.round(rng() * (array.length - 1));
+      randomNum = Math.round(Math.random() * (array.length - 1));
     }
     randomNumArray.push(randomNum);
   }
 
   randomNumArray.forEach((key, idx) => (results[idx] = array[key]));
-  const answer = results[Math.floor(rng() * results.length)];
+  const answer = array[firstRandomNum];
   console.log(answer);
   console.log(...results);
   return { results, answer };

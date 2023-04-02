@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import MistakeCounter from "../component/MistakeCounter";
 import { CurrentQuestion } from "../context/GlobalProvider";
-
+import React from "react";
 interface GameResultInterface {
   IsGameWon: boolean;
   score: number;
@@ -10,6 +10,12 @@ interface GameResultInterface {
   restartGame: () => void;
   createArrayOfMistake: (mistake: number) => boolean[];
   mistakenQuestions: CurrentQuestion[];
+}
+
+interface FlagIcon {
+  flagUrl: string;
+  answer: string;
+  index: number;
 }
 
 const GameResult = ({
@@ -22,6 +28,22 @@ const GameResult = ({
   mistakenQuestions,
 }: GameResultInterface) => {
   const navigate = useNavigate();
+
+  function FlagIcon({ flagUrl, answer, index }: FlagIcon) {
+    const flagIconPath = `../../node_modules/flag-icons/flags/4x3/${flagUrl}.svg`;
+
+    return (
+      <a
+        className={`game__result-mistakes-flags-link game__result-mistakes-flags-link-${index}`}
+        title={answer}
+        href={flagIconPath}
+        target="_blank"
+      >
+        <img className="game__result-mistakes-flags-img" src={flagIconPath} />
+      </a>
+    );
+  }
+
   return (
     <div className="home">
       <div className="game__result">
@@ -37,17 +59,11 @@ const GameResult = ({
                 className="game__result-mistakes-flags-container"
                 key={index}
               >
-                <a
-                  className={`game__result-mistakes-flags-link game__result-mistakes-flags-link-${index}`}
-                  title={question.answer}
-                  href={`../../node_modules/flag-icons/flags/4x3/${question.flagUrl}.svg`}
-                  target="_blank"
-                >
-                  <img
-                    className="game__result-mistakes-flags-img"
-                    src={`../../node_modules/flag-icons/flags/4x3/${question.flagUrl}.svg`}
-                  />
-                </a>
+                <FlagIcon
+                  flagUrl={question.flagUrl}
+                  answer={question.answer}
+                  index={index}
+                />
               </div>
             ))}
           </div>
