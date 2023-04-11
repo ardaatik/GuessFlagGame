@@ -45,7 +45,7 @@ const GameResult = ({
   }
 
   return (
-    <div className="home">
+    <div className="game">
       <div className="game__result">
         {IsGameWon && (
           <div className="game__result-text">

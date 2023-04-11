@@ -10,6 +10,10 @@
   justify-content: center;
   align-items: center;
   font-family: "Orbitron", sans-serif;
+  @media only screen and (max-width: $bp-smallest) {
+    height: 15vh;
+  }
+
   &-player1 {
     color: #93c4ec;
   }
@@ -24,8 +28,16 @@
     font-size: 3rem;
     letter-spacing: 0.1rem;
 
+    @media only screen and (max-width: $bp-small) {
+      flex: 0 0 33%;
+    }
+    @media only screen and (max-width: $bp-smallest) {
+      flex: 0 0 28%;
+    }
+    @media only screen and (max-width: $bp-even-smaller) {
+      flex: 0 0 25%;
+    }
     &-name {
-      font-size: 3rem;
       text-transform: capitalize;
       margin-bottom: auto;
     }

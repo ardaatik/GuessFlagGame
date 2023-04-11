@@ -6,16 +6,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
   border-radius: 1rem;
+  font-family: "Lato", sans-serif;
+
   @media only screen and (max-width: $bp-smallest) {
     height: 100vh;
   }
   &__title {
     color: #238072;
-    font-size: 4.4rem;
+    font-size: 5rem;
     font-weight: 900;
-    -webkit-text-stroke: 1.2px #fff;
+    -webkit-text-stroke: 1px #fff;
     @media only screen and (max-width: $bp-smallest) {
       display: none;
     }

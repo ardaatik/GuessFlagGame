@@ -16,7 +16,7 @@ const HomeScreen = ({ socket }: StartGameInterface) => {
 
   return (
     <div className="text-center home">
-      <h3 className="home__title">Welcome to Guess The Flag</h3>
+      <h3 className="home__title">World Geography Games</h3>
       <div className="home__text">
         <div className="home__text__container home__text__container-1">
           <p className=" home__text-paragraph home__text-paragraph-1">

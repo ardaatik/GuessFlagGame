@@ -5,7 +5,6 @@ const Gameplay = () => {
 
   return (
     <div className="game">
-      (
       <div className="game__container">
         <img
           className="game__img"
@@ -26,7 +25,6 @@ const Gameplay = () => {
           ))}
         </div>
       </div>
-      )
     </div>
   );
 };

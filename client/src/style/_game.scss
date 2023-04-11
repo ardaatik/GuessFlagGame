@@ -1,17 +1,13 @@
 .game {
-  padding: 2rem;
   background-color: #33ccff;
   min-width: 60vh;
-  height: 72vh;
+  height: 85vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-
   @media only screen and (max-width: $bp-smallest) {
-    padding: 0;
-    height: 100vh;
-    border: 3px solid #fff;
+    flex: 0 0 80%;
   }
   &__loading {
     font-size: 6rem;
@@ -22,9 +18,13 @@
     justify-content: space-between;
     align-items: center;
     flex: 0 0 100%;
+    @media only screen and (max-width: $bp-smallest) {
+      flex: 0 0 80%;
+    }
   }
   &__button {
-    width: 46rem;
+    width: 50rem;
+
     height: 6.5rem;
     line-height: 3.1rem;
     font-size: 3rem;
@@ -43,8 +43,8 @@
     }
   }
   &__img {
-    height: 35rem;
-    width: 46rem;
+    height: 37rem;
+    width: 50rem;
     margin: 2rem 0;
   }
 
