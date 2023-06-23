@@ -36,7 +36,6 @@ export interface Results {
 
 export interface GlobalContextInterface {
   openInput: boolean;
-  setOpenInput: React.Dispatch<React.SetStateAction<boolean>>;
   mistakenQuestions: CurrentQuestion[];
   opponentsAttempts: number;
   mistakes: number;
@@ -46,18 +45,22 @@ export interface GlobalContextInterface {
   opponentsName: string;
   isGameLost: boolean;
   isGameWon: boolean;
-  setRoom: React.Dispatch<React.SetStateAction<string>>;
-  setName: React.Dispatch<React.SetStateAction<string>>;
   socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
   currentQuestion: CurrentQuestion;
   results: Results;
+  listOfCountries: Country[];
+  singlePlayerMode: boolean;
+  setOpenInput: React.Dispatch<React.SetStateAction<boolean>>;
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
+  setName: React.Dispatch<React.SetStateAction<string>>;
   initGameRound: () => void;
   resetTheGame: () => void;
   guessTheAnswer: (
     guess: string,
     socket: io.Socket<ServerToClientEvents, ClientToServerEvents>
   ) => void;
-  listOfCountries: Country[];
+  setResults: React.Dispatch<React.SetStateAction<Results>>;
+  setSinglePlayerMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type GlobalProviderProps = {
@@ -80,38 +83,33 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
 
   // State: past question result
   const [results, setResults] = useState<Results>(defaultResults);
+  const [name, setName] = useState("");
+  const [singlePlayerMode, setSinglePlayerMode] = useState(false);
   const mistakes = results.attempts - results.score;
-
   const {
     opponentsScore,
     opponentsAttempts,
     opponentsMistakes,
     opponentsName,
     room,
-    name,
     setOpponentScore,
     setOpponentAttempts,
     setRoom,
-    setName,
   } = useSocketListeners(socket);
 
   const { listOfCountries, setListOfCountries } = useListOfCountries();
-
   const [isGameLost, isGameWon, setIsGameLost, setIsGameWon] = useGameState(
     mistakes,
     opponentsMistakes
   );
-
-  // rest of the component code
-  // 2. Each round of game play
   const initGameRound = () => {
-    // select 4 random countries
+    // returns the question and the options where the
+    const { result, answer } = randomSelect(listOfCountries, 4, room);
 
-    // pick one of the random countries as the answer
-    let { results, answer } = randomSelect(listOfCountries, 4, room);
-
+    console.log(...result);
+    console.log(answer);
     // extract the names of the 4 random countries and set options, including the answer
-    const options = results.map((each) => each.name);
+    const options = result.map((each) => each.name);
 
     // shuffle the options
     const shuffledOptions = shuffle(options);
@@ -135,40 +133,33 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
     guess: string,
     socket: io.Socket<ServerToClientEvents, ClientToServerEvents>
   ) => {
-    // increment the no. of attempts
-    // set display of the results card to true
+    setResults((prevResults) => ({
+      ...prevResults,
+      show: true,
+      attempts: prevResults.attempts + 1,
+    }));
+    console.log(socket);
 
+    const isCorrectGuess = guess === currentQuestion.answer;
     setResults((prevResults) => {
-      return {
+      const newScore = isCorrectGuess
+        ? prevResults.score + 1
+        : prevResults.score;
+      const updatedResults = {
         ...prevResults,
-        show: true,
-        attempts: prevResults.attempts + 1,
+        correct: isCorrectGuess,
+        score: newScore,
+        previousQuestion: { ...currentQuestion },
       };
+
+      if (!singlePlayerMode) {
+        socket.emit("clientScore", newScore, prevResults.attempts);
+      }
+
+      return updatedResults;
     });
-    // if guess is correct, set results for correct guess
-    if (guess === currentQuestion.answer) {
-      setResults((prevResults) => {
-        socket.emit("clientScore", prevResults.score + 1, prevResults.attempts);
-        return {
-          ...prevResults,
-          correct: true,
-          score: prevResults.score + 1,
-          previousQuestion: { ...currentQuestion },
-        };
-      });
-    }
-    // if guess is wrong, set results for wrong guess
-    if (guess !== currentQuestion.answer) {
-      // console.log("wrong");
-      setResults((prevResults) => {
-        socket.emit("clientScore", prevResults.score, prevResults.attempts);
-        return {
-          ...prevResults,
-          correct: false,
-          previousQuestion: { ...currentQuestion },
-        };
-      });
-      // adding the mistaken questions to show in results
+
+    if (!isCorrectGuess) {
       setMistakenQuestions((prevQuestions) => [
         ...prevQuestions,
         currentQuestion,
@@ -206,13 +197,16 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
         socket,
         currentQuestion,
         results,
+        openInput,
         initGameRound,
         resetTheGame,
         guessTheAnswer,
         setRoom,
         setName,
-        openInput,
+        setResults,
         setOpenInput,
+        singlePlayerMode,
+        setSinglePlayerMode,
       }}
     >
       {children}
