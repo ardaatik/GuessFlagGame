@@ -1,13 +1,19 @@
 .game {
   background-color: #33ccff;
   min-width: 60vh;
-  height: 85vh;
+  min-height: 85vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  @media only screen and (max-width: $bp-smallest) {
+  @media only screen and (max-width: $bp-medium) {
+    min-width: 45vh;
+  }
+  @media only screen and (max-width: $bp-extra-small) {
     flex: 0 0 80%;
+  }
+  @media only screen and (max-width: $bp-smallest) {
+    min-width: 35vh;
   }
   &__loading {
     font-size: 6rem;
@@ -18,13 +24,9 @@
     justify-content: space-between;
     align-items: center;
     flex: 0 0 100%;
-    @media only screen and (max-width: $bp-smallest) {
-      flex: 0 0 80%;
-    }
   }
   &__button {
     width: 50rem;
-
     height: 6.5rem;
     line-height: 3.1rem;
     font-size: 3rem;
@@ -75,6 +77,38 @@
       width: 46rem;
       border-radius: 0.4rem;
     }
+  }
+  &__loader {
+    background: #000;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: all ease-in-out 0.5s;
+    &__image {
+      height: 50rem;
+      width: 50rem;
+      background-image: url(../style/assets/globe.svg);
+      background-repeat: no-repeat;
+      animation: roll 1s ease-in-out infinite forwards;
+    }
+  }
+}
+@keyframes roll {
+  from {
+    transform: rotate(0);
+  }
+  90%,
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -184,5 +218,81 @@
   }
   &-text {
     font-size: 5rem;
+  }
+}
+
+.game__result__single__player {
+  background-color: #33ccff;
+  min-width: 60vh;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 3rem;
+  flex-direction: column;
+  &__score {
+    width: 40rem;
+    height: 25rem;
+    flex-direction: column;
+    text-align: center;
+    &-text {
+      color: #fff;
+      font-size: 6rem;
+      font-weight: bold;
+      margin-bottom: 3rem;
+    }
+    &-results {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      color: #000;
+    }
+    &-points {
+      height: 12rem;
+      width: 12rem;
+      border-radius: 50%;
+      background-color: #009b2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 1000;
+      font-size: 5rem;
+      color: #000;
+    }
+    &-attempts {
+      height: 12rem;
+      width: 12rem;
+      border-radius: 50%;
+      background-color: #ffb900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 1000;
+      font-size: 5rem;
+      color: #000;
+    }
+  }
+  &-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    & > * {
+      width: 36rem;
+      height: 6rem;
+      line-height: 3.1rem;
+      font-size: 3rem;
+      border: none;
+      border-radius: 0.9rem;
+      font-weight: 700;
+      text-transform: capitalize;
+      background: linear-gradient(to top, #cdcdcd 50%, #e7e7e7 50%);
+      box-shadow: 0.4rem 0.5rem rgba(0, 0, 0, 0.6);
+      margin-bottom: 2rem;
+    }
   }
 }
