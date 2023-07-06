@@ -1,15 +1,24 @@
 import { ServerToClientEvents, ClientToServerEvents } from "../../../typings";
 import * as io from "socket.io-client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface StartGameInterface {
   socket: io.Socket<ServerToClientEvents, ClientToServerEvents>;
+  setSinglePlayerMode: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const HomeScreen = ({ socket }: StartGameInterface) => {
+const HomeScreen = ({
+  socket,
+  setSinglePlayerMode,
+  setIsLoading,
+}: StartGameInterface) => {
+  const navigate = useNavigate();
   const [queueIsLoading, setQueueIsLoading] = useState(false);
 
   const handleJoinMatch = () => {
+    setSinglePlayerMode(false);
     socket.emit("clientJoinQueue");
     setQueueIsLoading(true);
   };
@@ -33,6 +42,24 @@ const HomeScreen = ({ socket }: StartGameInterface) => {
         </div>
       </div>
       <div className="home__submit-block">
+        <button
+          type="button"
+          className="home__button"
+          onClick={() => {
+            setIsLoading(true); // Set isLoading to true before starting the loading state
+            navigate("/start");
+            setSinglePlayerMode(true);
+            // Simulate a delay of 1 second before navigating
+            setTimeout(() => {
+              setIsLoading(false); // Set isLoading back to false after the delay
+            }, 500);
+          }}
+        >
+          <svg className="home__button-icon icon-play2">
+            <use xlinkHref="./src/style/assets/sprite.svg#icon-play2" />
+          </svg>
+          Play
+        </button>
         {!queueIsLoading ? (
           <button
             type="button"
@@ -42,7 +69,7 @@ const HomeScreen = ({ socket }: StartGameInterface) => {
             <svg className="home__button-icon icon-play2">
               <use xlinkHref="./src/style/assets/sprite.svg#icon-play2" />
             </svg>
-            Join Game
+            Join
           </button>
         ) : (
           <div className="home__button-loading"></div>
