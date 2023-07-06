@@ -3,6 +3,7 @@ import { useContext, useEffect, useMemo } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 import ScoreBoard from "./ScoreBoard";
 import GameResult from "./GameResult";
+import { useNavigate } from "react-router";
 
 const GamePlayScreen = () => {
   const {
@@ -20,14 +21,20 @@ const GamePlayScreen = () => {
     isGameWon,
     mistakenQuestions,
   } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(room, "logging room from UseEffect");
-    resetTheGame();
-    initGameRound();
-    console.log("sending name again !!");
-    socket.emit("clientName", name, room);
+    if (!name) {
+      navigate("/");
+    } else {
+      // console.log(room, "logging room from UseEffect");
+      resetTheGame();
+      initGameRound();
+      // console.log("sending name again !!");
+      socket.emit("clientName", name, room);
+    }
   }, []);
+
   const createArrayOfMistake = useMemo(
     () => (mistake: number) => {
       return Array(3)
@@ -36,6 +43,7 @@ const GamePlayScreen = () => {
     },
     [opponentsScore]
   );
+
   return opponentsName ? (
     <>
       {isGameLost ? (
@@ -64,9 +72,7 @@ const GamePlayScreen = () => {
       )}
     </>
   ) : (
-    <div className="game">
-      <div className="game__loading">Loading...</div>
-    </div>
+    <></>
   );
 };
 
