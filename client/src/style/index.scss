@@ -22,31 +22,64 @@ a:focus {
 html {
   box-sizing: border-box;
   font-size: 60%;
+  background: #33ccff;
+
   @media only screen and (max-width: $bp-largest) {
     font-size: 57%;
   }
-  @media only screen and (max-width: $bp-large) {
+
+  @media only screen and (max-width: $bp-extra-large) {
     font-size: 52%;
   }
-  @media only screen and (max-width: $bp-smallest),
-    screen and (max-height: $bp-medium) {
+
+  @media only screen and (max-width: $bp-extra-small),
+    screen and (max-height: $bp-large) {
     font-size: 45%;
   }
-  @media only screen and (max-width: $bp-even-smaller),
-    screen and (max-height: $bp-small) {
-    font-size: 38%;
+
+  @media only screen and (max-width: $bp-smallest) {
+    font-size: 36%;
   }
+
+  @media only screen and (max-height: $bp-medium) {
+    font-size: 35%;
+  }
+
+  @media only screen and (max-height: 43.75em) {
+    font-size: 32%;
+  }
+
+  @media only screen and (max-height: $bp-extra-extra-small) {
+    font-size: 25%;
+  }
+
+  @media only screen and (max-height: 28.125em) {
+    font-size: 20%;
+  }
+}
+
+image {
+  transition: all 0.5s;
 }
 
 body {
   display: flex;
   line-height: 1.6;
   min-height: 100vh;
-  background-color: #f1f6f9;
   font-weight: 500;
   justify-content: center;
   align-items: center;
   background: url("./assets/background.png");
+
+  @media only screen and (max-width: $bp-medium) {
+    background: #33ccff;
+    background-color: #33ccff !important;
+    min-width: 40vh;
+  }
+
+  @media only screen and (max-width: $bp-smallest) {
+    min-width: 30vh;
+  }
   background-size: cover;
   background-repeat: no-repeat;
 }
