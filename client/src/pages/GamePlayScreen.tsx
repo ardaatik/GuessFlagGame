@@ -1,8 +1,8 @@
-import Gameplay from "./Gameplay";
+import Gameplay from "../component/Gameplay";
 import { useContext, useEffect, useMemo } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
-import ScoreBoard from "./ScoreBoard";
-import GameResult from "./GameResult";
+import ScoreBoard from "../component/ScoreBoard";
+import GameResult from "../component/GameResult";
 import { useNavigate } from "react-router-dom";
 
 const GamePlayScreen = () => {

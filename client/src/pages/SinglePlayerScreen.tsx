@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
-import GamePlay from "./Gameplay";
+import GamePlay from "../component/Gameplay";
 import { GlobalContext } from "../context/GlobalProvider";
 import { useNavigate } from "react-router-dom";
-import SinglePlayerResults from "./SinglePlayerResults";
+import SinglePlayerResults from "../component/SinglePlayerResults";
 
 const SinglePlayerScreen = () => {
 	const navigate = useNavigate();
