@@ -11,27 +11,27 @@
     "test": "vitest --coverage"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "bootstrap": "^5.2.3",
-    "flag-icons": "^6.6.6",
+    "@testing-library/jest-dom": "^6.1.4",
+    "bootstrap": "^5.3.2",
+    "flag-icons": "^6.12.0",
     "random-seed": "^0.3.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.2",
+    "react-bootstrap": "^2.9.1",
     "react-confetti": "^6.1.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.8.1",
-    "sass": "^1.58.3",
-    "socket.io-client": "^4.6.1"
+    "react-router-dom": "^6.18.0",
+    "sass": "^1.69.5",
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
-    "@types/random-seed": "^0.3.3",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@vitejs/plugin-react": "^3.1.0",
-    "@vitest/coverage-c8": "^0.31.4",
+    "@types/random-seed": "^0.3.4",
+    "@types/react": "^18.2.35",
+    "@types/react-dom": "^18.2.14",
+    "@vitejs/plugin-react": "^4.1.1",
+    "@vitest/coverage-c8": "^0.33.0",
     "jsdom": "^22.1.0",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0",
-    "vitest": "^0.31.4"
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vitest": "^0.34.6"
   }
 }
