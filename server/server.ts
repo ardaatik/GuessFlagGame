@@ -10,7 +10,7 @@ app.use(cors());
 const server = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
 	cors: {
-		origin: "http://localhost:5173",
+		origin: "https://neon-crepe-1d3b45.netlify.app",
 		methods: ["GET", "POST"],
 		credentials: true,
 	},
