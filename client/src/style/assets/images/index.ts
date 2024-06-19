@@ -8,6 +8,7 @@ export { default as IconCustomize } from "./customize.svg?react";
 export { default as IconDownArrow } from "./keyboard_arrow_down.svg?react";
 export { default as IconLeftArrow } from "./keyboard_arrow_left.svg?react";
 export { default as IconMistake } from "./mistake.svg?react";
+export { default as IconMute } from "./mute.svg?react";
 export { default as IconAmount } from "./numbers.svg?react";
 export { default as IconPlay } from "./play.svg?react";
 export { default as IconRefresh } from "./refresh.svg?react";
