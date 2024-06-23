@@ -1,0 +1,49 @@
+@import "base";
+
+.header {
+	width: 90%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	height: 8%;
+	color: #000;
+	&Container {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		&Right {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 10%;
+		}
+		&Left {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 10%;
+		}
+	}
+
+	&Title {
+		font-size: 25px;
+		font-weight: bold;
+		@media only screen and (max-width: $bp-extra-small) {
+			font-size: 20px;
+		}
+	}
+}
+
+.headerButton {
+	background-color: transparent !important;
+
+	&Icon {
+		width: 25px !important;
+		height: 25px !important;
+		@media only screen and (max-width: $bp-extra-small) {
+			width: 20px !important;
+			height: 20px !important;
+		}
+	}
+}
