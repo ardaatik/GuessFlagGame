@@ -1,0 +1,73 @@
+.waitingWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 92%;
+	width: 100%;
+}
+
+.roomCode {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5rem;
+	color: var(--clr-bg-secondary);
+	&Text {
+		font-size: 3rem;
+		user-select: none;
+	}
+
+	&TextCode {
+		font-weight: bold;
+		font-size: 3.4rem;
+		margin-left: 0.5rem;
+	}
+
+	&CopyButton {
+		margin-left: 0.5rem;
+	}
+}
+
+.players {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 75%;
+	max-width: 50rem;
+}
+
+.player {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 17.5rem;
+	max-height: 17.5rem;
+	height: 32vw;
+	background-color: var(--clr-modal);
+	border: 0.3rem solid var(--clr-border);
+	border-radius: 1.5rem;
+	color: var(--clr-main);
+
+	&Text {
+		font-size: 3rem;
+		position: absolute;
+		top: -0.5rem;
+		transform: translateY(-100%);
+		color: var(--clr-main);
+	}
+}
+
+.iconUser {
+	width: 40%;
+	height: 40%;
+}
+
+.textVs {
+	font-weight: bold;
+	margin: 0 2rem;
+	font-size: 3rem;
+	@media (max-width: 40rem) {
+		margin: 0 1rem;
+	}
+}
