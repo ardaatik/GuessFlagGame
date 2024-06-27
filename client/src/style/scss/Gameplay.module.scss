@@ -1,0 +1,93 @@
+@import "base";
+
+.game {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: relative;
+
+	&.answered {
+		&::before {
+			width: 100%;
+			height: 100%;
+			content: "";
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background-color: rgba(0, 0, 0, 0.5); // Black with 50% opacity
+			z-index: 1;
+		}
+	}
+	&.disabled {
+		pointer-events: none;
+	}
+
+	&Container {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+}
+
+.gameImage {
+	height: 21em;
+	width: 28em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	@media only screen and (min-width: $bp-extra-large) {
+		height: 18em;
+		width: 24em;
+	}
+
+	&Wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 55%;
+		width: 100%;
+	}
+	&Flag {
+		height: 100%;
+		width: 100% !important;
+		padding: 0 !important;
+		box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+			rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+		background-size: cover !important;
+	}
+
+	&Overlay {
+		width: 100%;
+		position: absolute;
+		top: 25%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: white;
+		font-size: 3rem;
+		font-weight: bold;
+		z-index: 5;
+	}
+}
+
+.gameButtonGroup {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 45%;
+	width: 28em;
+	gap: 2rem;
+	margin-top: 2rem;
+	@media only screen and (min-width: $bp-extra-large) {
+		height: 18em;
+		width: 24em;
+	}
+}
