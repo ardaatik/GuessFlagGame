@@ -41,7 +41,7 @@ function Header({ title, className, variant = "1" }: HeaderProps) {
 						onClick={() => navigate("/customize")}
 						title="Customize"
 					>
-						<IconCustomize className={styles.headerButtonIcon} />
+						<IconCustomize className={styles[`headerButtonIcon--${variant}`]} />
 					</ButtonRounded>
 				) : (
 					<ButtonRounded
@@ -50,11 +50,11 @@ function Header({ title, className, variant = "1" }: HeaderProps) {
 						className={styles.headerButton}
 						onClick={() => onLeaveRoom()}
 					>
-						<IconLeftArrow className={styles.headerButtonIcon} />
+						<IconLeftArrow className={styles[`headerButtonIcon--${variant}`]} />
 					</ButtonRounded>
 				)}
 			</div>
-			<div className={styles.headerTitle}>{title}</div>
+			<div className={styles[`headerTitle--${variant}`]}>{title}</div>
 			<div className={styles.headerContainerRight}>
 				<ButtonRounded
 					variant={variant}
@@ -63,9 +63,9 @@ function Header({ title, className, variant = "1" }: HeaderProps) {
 					onClick={() => toggleMute()}
 				>
 					{volume > 0 ? (
-						<IconVolume className={styles.headerButtonIcon} />
+						<IconVolume className={styles[`headerButtonIcon--${variant}`]} />
 					) : (
-						<IconMute className={styles.headerButtonIcon} />
+						<IconMute className={styles[`headerButtonIcon--${variant}`]} />
 					)}
 				</ButtonRounded>
 			</div>
