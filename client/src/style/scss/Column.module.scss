@@ -1,0 +1,29 @@
+.setting {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-bottom: 10px;
+	width: 100%;
+	font-size: 2.5rem;
+}
+
+.label {
+	margin-bottom: 15px;
+	opacity: 0.75;
+	transition: opacity 200ms;
+	user-select: none;
+	color: var(--clr-text-dark);
+	font-weight: bold;
+	&.active {
+		opacity: 1;
+	}
+}
+
+.gameModeButtons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 7px;
+	justify-content: center;
+}
