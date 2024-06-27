@@ -1,0 +1,16 @@
+.gameModeError {
+	&Text {
+		font-size: 2rem;
+		color: var(--clr-char-incorrect);
+		font-weight: bold;
+		text-align: center;
+		line-height: 20px;
+	}
+
+	&Container {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: center;
+	}
+}
