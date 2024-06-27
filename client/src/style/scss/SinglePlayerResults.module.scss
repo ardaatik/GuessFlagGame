@@ -1,0 +1,119 @@
+.singlePlayerResults {
+	background-color: var(--clr-bg-primary);
+	width: 100% !important;
+	height: 100% !important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-size: 3rem;
+	flex-direction: column;
+
+	&Buttons {
+		display: flex;
+		flex-direction: column;
+		margin-top: 1.5rem;
+		& > * {
+			width: 36rem;
+			height: 6rem;
+			line-height: 3.1rem;
+			font-size: 3rem;
+			border: none;
+			border-radius: 0.9rem;
+			font-weight: 700;
+			text-transform: capitalize;
+			background: var(--clr-bg-button);
+			box-shadow: 0.4rem 0.5rem rgba(0, 0, 0, 0.6);
+			margin-bottom: 2rem;
+		}
+	}
+	&Confetti {
+		position: absolute;
+		top: 50% !important;
+		left: 50% !important;
+		transform: translate(-50%, -50%) !important;
+		height: 100% !important;
+		pointer-events: none;
+	}
+}
+
+.singlePlayerResultsScore {
+	width: 40rem;
+	height: 25rem;
+	flex-direction: column;
+	text-align: center;
+	&Text {
+		color: #fff;
+		font-size: 6rem;
+		font-weight: bold;
+		margin-bottom: 3rem;
+	}
+	&Board {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		font-weight: bold;
+		color: var(--clr-tooltip-bg);
+	}
+	&Points {
+		height: 12rem;
+		width: 12rem;
+		border-radius: 50%;
+		background-color: #009b2e;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 1000;
+		font-size: 5rem;
+		color: var(--clr-tooltip-bg);
+	}
+	&Attempts {
+		height: 12rem;
+		width: 12rem;
+		border-radius: 50%;
+		background-color: #ffb900;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 1000;
+		font-size: 5rem;
+		color: var(--clr-tooltip-bg);
+	}
+}
+
+.mistakesSinglePlayer {
+	display: flex;
+	flex-direction: column;
+	height: 22%;
+	&Column {
+		overflow: auto;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	&Flags {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 2rem;
+		&Container {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+}
+
+.mistakesShowAll {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+}
+
+.IconDownArrow {
+	width: 3rem;
+	height: 3rem;
+	fill: var(--clr-text);
+}
