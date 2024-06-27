@@ -1,0 +1,85 @@
+.container {
+	display: flex;
+	height: 92%;
+	width: 100%;
+	flex-direction: column;
+	padding: 4rem;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.gameModeBtn {
+	font-size: inherit;
+	font-family: inherit;
+	border-radius: 12px;
+	padding: 0.4em 1em;
+	border: none;
+	cursor: pointer;
+	border: 2px solid transparent;
+	margin-top: 5px;
+
+	&:hover,
+	&.active {
+		border-color: var(--clr-text);
+	}
+	&--default {
+		color: var(--clr-text);
+		background-color: var(--clr-bg-tertiary);
+	}
+}
+
+.range {
+	position: relative;
+	width: 75%;
+	&Input {
+		position: relative;
+		margin-top: 3px;
+		accent-color: var(--clr-main);
+		width: 100%;
+	}
+
+	&TooltipContainer {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	&TooltipRelative {
+		position: relative !important;
+	}
+	&Tooltip {
+		position: absolute !important;
+		left: 0;
+	}
+}
+
+.buttonReset {
+	&ToDefault {
+		font-weight: bold;
+		display: flex;
+		align-items: center;
+		transition: all 125ms ease-out;
+		background-color: var(--clr-bg-tertiary) !important;
+		color: var(--clr-char) !important;
+
+		&:hover {
+			background-color: var(--clr-bg-tertiary) !important;
+			color: var(--clr-text) !important;
+			border-color: var(--clr-text) !important;
+		}
+	}
+
+	&Wrapper {
+		margin-top: auto !important;
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		gap: 2rem;
+	}
+}
