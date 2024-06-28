@@ -13,7 +13,7 @@
 	&Container {
 		min-width: 60vh;
 		height: 96%;
-		background-color: #33ccff;
+		background-color: var(--clr-bg-primary);
 		display: flex;
 		flex-direction: column;
 		align-items: center;

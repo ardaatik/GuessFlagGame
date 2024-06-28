@@ -18,7 +18,7 @@
 }
 
 .loader {
-	background: #000;
+	background: var(--clr-tooltip-bg);
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;

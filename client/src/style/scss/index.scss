@@ -2,26 +2,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap");
 
 :root {
-	--color-light-text: rgb(229, 204, 158);
-	--shadow-dark: rgb(0, 0, 0, 0.3);
-	--clr-raw: #817979;
+	--clr-caret: orange; // maybe
 	--clr-main: #fe6969;
 	--clr-tooltip-bg: #000;
-	--clr-modal: #001133;
 	--clr-char: #ffffff63;
 	--clr-char-correct: #f3f2f2;
 	--clr-char-incorrect: #fc626a;
-	--clr-char-extra: #dcdcdc40;
-	--clr-caret: #f8aa35;
 	--clr-border: #28285a;
-	--typemode-bg: rgba(0, 0, 0, 0.25);
 	--clr-text: #dcdcdc;
-	--clr-tooltip-text: #dcdcdc;
 	--clr-bg-primary: #33ccff;
 	--clr-bg-secondary: #001133;
 	--clr-bg-tertiary: #0d0d1d;
+	--clr-bg-button: linear-gradient(to top, #cdcdcd 50%, #e7e7e7 50%);
 	--clr-text-dark: #121229;
-	--font-family-default: "Laos", sans-serif;
+	--clr-white: #fff;
+	--font-family-default: "Roboto", monospace;
 }
 
 * {
@@ -90,7 +85,7 @@ h1 {
 html {
 	box-sizing: border-box !important;
 	font-size: 60%;
-	background: #33ccff;
+	background: var(--clr-bg-primary);
 	// WIDTH
 
 	@media only screen and (max-width: $bp-extra-large) {
@@ -131,10 +126,10 @@ body {
 	justify-content: center;
 	align-items: center;
 	background: url("../assets/images/background.png");
-	font-family: "Roboto", monospace;
+	font-family: var(--font-family-default);
 	background-size: cover;
 	background-repeat: no-repeat;
 	@media only screen and (max-width: $bp-medium) {
-		background-color: #33ccff !important;
+		background-color: var(--clr-bg-primary) !important;
 	}
 }
