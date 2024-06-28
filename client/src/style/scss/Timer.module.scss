@@ -1,0 +1,90 @@
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+.countdown {
+	position: absolute;
+	top: -1rem;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	font-weight: bold;
+	font-size: 4rem;
+	color: var(--clr-char-correct);
+	&FadeOut {
+		transition: opacity 500ms ease-out;
+		transition-delay: 1s;
+		opacity: 0;
+	}
+
+	&FadeIn {
+		transition: opacity 0.5s ease-out;
+		opacity: 1;
+	}
+}
+
+.baseTimer {
+	position: absolute;
+	width: 10rem;
+	height: 10rem;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.baseTimerSvg {
+	transform: scaleX(-1);
+	opacity: 0;
+
+	&.active {
+		transition: opacity 0.5s ease-out;
+		opacity: 1;
+	}
+}
+
+.baseTimerCircle {
+	fill: none;
+	stroke: none;
+}
+
+.baseTimerPathElapsed {
+	stroke-width: 6px;
+	stroke: grey;
+}
+
+.baseTimerPathRemaining {
+	stroke-width: 6px;
+	stroke-linecap: round;
+	transform: rotate(90deg);
+	transform-origin: center;
+	transition: 1s linear all;
+	fill-rule: nonzero;
+	stroke: currentColor;
+}
+
+.baseTimerPathRemaining.green {
+	color: rgb(65, 184, 131);
+}
+
+.baseTimerPathRemaining.orange {
+	color: orange;
+}
+
+.baseTimerPathRemaining.red {
+	color: red;
+}
