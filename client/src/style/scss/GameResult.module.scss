@@ -1,0 +1,73 @@
+.gameResult {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+	height: 100%;
+	width: 100%;
+
+	&Text {
+		font-size: 5rem;
+	}
+}
+
+.mistakes {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	&Flags {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 2rem;
+		&Container {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+}
+
+.playAgain {
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	transition: all 125ms ease-out;
+	background-color: var(--clr-bg-tertiary) !important;
+	color: var(--clr-char) !important;
+	&:hover {
+		background-color: var(--clr-bg-tertiary) !important;
+		color: var(--clr-text) !important;
+		border-color: var(--clr-text) !important;
+	}
+	&Icon {
+		margin-right: 1rem;
+		width: 2.5rem;
+		height: 2.5rem;
+	}
+}
+
+.playAgainWrapper {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.playAgainText {
+	position: absolute;
+	bottom: -10px;
+	left: 50%;
+	transform: translate(-50%, 100%);
+	opacity: 0.75;
+	text-align: center;
+	width: 100%;
+}
+
+.playAgainBtnText {
+	padding: 0.5 1rem;
+	text-align: center;
+	font-size: 2rem;
+	line-height: 2rem;
+}
