@@ -9,11 +9,12 @@ import {
 	ServerToClientEvents,
 } from "../../typings";
 import {
+	clearCountdownInterval,
+	clearRoomInterval,
 	createQuestion,
 	deleteAvailableCountriesByRoomId,
 	generateCode,
 	getGameState,
-	getRoomInterval,
 	startCountdown,
 	startTimer,
 } from "./helpers";
@@ -21,7 +22,8 @@ import {
 export default function configure(s: HttpServer) {
 	const io = new Server<ClientToServerEvents, ServerToClientEvents>(s, {
 		cors: {
-			origin: "http://localhost:5173",
+			origin:
+				process.env.NODE_ENV === "development" ? "http://localhost:5173" : "",
 			methods: ["GET", "POST"],
 			allowedHeaders: ["my-custom-header"],
 			credentials: true,
@@ -41,7 +43,6 @@ export default function configure(s: HttpServer) {
 				const roomCode = generateCode(6);
 
 				clientRooms[socket.id] = roomCode;
-				console.log("rooms: ", clientRooms);
 
 				roomState[roomCode] = {
 					gameOptions: {
@@ -50,10 +51,16 @@ export default function configure(s: HttpServer) {
 						amount,
 					},
 					players: {
-						player1: { id: socket.id, score: 0, attempts: 0, mistakes: 0 },
+						player1: {
+							id: socket.id,
+							score: 0,
+							attempts: 0,
+							mistakes: 0,
+							answered: false,
+							guess: null,
+						},
 					},
 				};
-				console.log(roomState[roomCode]);
 
 				socket.join(roomCode);
 				socket.emit("has-joined-room", roomCode);
@@ -81,19 +88,29 @@ export default function configure(s: HttpServer) {
 						score: 0,
 						attempts: 0,
 						mistakes: 0,
+						answered: false,
+						guess: null,
 					},
 				},
 			};
 			socket.join(roomCode);
 			socket.emit("has-joined-room", roomCode);
-			startCountdown(roomCode, io, gameOptions?.time);
+			startCountdown(roomCode, io, gameOptions?.time, questionData);
 			// Emit the room state
 			io.to(roomCode).emit("room-state", roomState[roomCode]);
 		});
 
 		socket.on(
 			"question-change",
-			({ score, attempts }: { score: number; attempts: number }) => {
+			({
+				score,
+				attempts,
+				guess,
+			}: {
+				score: number;
+				attempts: number;
+				guess: string;
+			}) => {
 				const roomCode = clientRooms[socket.id];
 
 				if (!roomCode || !roomState[roomCode]) {
@@ -116,7 +133,7 @@ export default function configure(s: HttpServer) {
 
 				socket.broadcast
 					.to(roomCode)
-					.emit("question-change", player, score, attempts);
+					.emit("question-change", player, score, attempts, guess);
 				if (
 					// If both players have answered, generate a new question
 					roomState[roomCode].players.player1.answered &&
@@ -133,21 +150,19 @@ export default function configure(s: HttpServer) {
 						opponentPlayerState,
 						gameOptions?.amount
 					);
-					console.log("gameState: ", gameState);
+					clearRoomInterval(roomCode);
+					clearCountdownInterval(roomCode); // TODO should only be cleared first round of game...
 					if (gameState) {
 						// When game ends, delete question array and clear timer interval
 						deleteAvailableCountriesByRoomId(roomCode);
-						clearInterval(getRoomInterval(roomCode));
 						io.to(roomCode).emit("game-ended");
 					} else {
-						const newQuestion = createQuestion(roomCode, gameOptions?.regions);
-						roomState[roomCode].question = newQuestion;
+						const questionData = createQuestion(roomCode, gameOptions?.regions);
+						roomState[roomCode].question = questionData;
 						// Reset the answered flags for both players
 						roomState[roomCode].players.player1.answered = false;
 						roomState[roomCode].players.player2!.answered = false;
-
-						io.to(roomCode).emit("room-state", roomState[roomCode]);
-						startTimer(roomCode, io, gameOptions?.time);
+						startTimer(roomCode, io, gameOptions?.time, questionData);
 					}
 				}
 			}
@@ -159,10 +174,9 @@ export default function configure(s: HttpServer) {
 			if (!roomCode || !roomState[roomCode]) {
 				return;
 			}
-			console.log("rooms: ", clientRooms);
 			delete clientRooms[socket.id];
-			clearInterval(getRoomInterval(roomCode));
-
+			clearRoomInterval(roomCode);
+			clearCountdownInterval(roomCode);
 			const player =
 				roomState[roomCode].players.player1.id === socket.id
 					? "player1"
@@ -199,8 +213,6 @@ export default function configure(s: HttpServer) {
 			const opponentPlayer = player === "player1" ? "player2" : "player1";
 			const opponentPlayerState = roomState[roomCode].players[opponentPlayer];
 
-			console.log("LOGGING STATE", state);
-
 			if (state.players[opponentPlayer]?.playAgain) {
 				roomState[roomCode] = {
 					gameOptions: gameOptions,
@@ -222,10 +234,9 @@ export default function configure(s: HttpServer) {
 						},
 					},
 				};
-				console.log("roomState: ", roomState[roomCode]);
 
 				io.to(roomCode).emit("play-again");
-				startCountdown(roomCode, io, gameOptions?.time);
+				startCountdown(roomCode, io, gameOptions?.time, questionData);
 				io.to(roomCode).emit("room-state", roomState[roomCode]);
 			} else {
 				roomState[roomCode].players[player]!.playAgain = true;
