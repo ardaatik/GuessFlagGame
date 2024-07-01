@@ -1,9 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { Server } from "socket.io";
-import { Country } from "../../client/src/types";
 import {
 	ClientToServerEvents,
+	Country,
+	CurrentQuestion,
 	GamemodeRegion,
 	PlayerState,
 	ServerToClientEvents,
@@ -27,16 +28,32 @@ export function generateCode(length: number) {
 	return output;
 }
 
+const countdownIntervals: { [roomCode: string]: NodeJS.Timeout } = {};
+const roomIntervals: { [roomCode: string]: NodeJS.Timeout } = {};
+
+// Function to clear the interval for a room
+export const clearCountdownInterval = (roomCode: string) => {
+	if (countdownIntervals[roomCode]) {
+		clearInterval(countdownIntervals[roomCode]);
+		delete countdownIntervals[roomCode]; // Remove the interval ID from the object
+	}
+};
+
+// Updated startCountdown function
 export function startCountdown(
 	roomCode: string,
 	io: Server<ClientToServerEvents, ServerToClientEvents>,
-	duration: number = 60000
+	duration: number = 60000,
+	question: CurrentQuestion
 ) {
 	const startsIn = 5000;
-
 	const startsAt = new Date().getTime() + startsIn;
 
 	io.to(roomCode).emit("game-starts-in", startsIn);
+
+	// Clear any existing interval for this room before setting a new one
+	clearCountdownInterval(roomCode);
+
 	const interval = setInterval(() => {
 		const remaining = startsAt - new Date().getTime();
 
@@ -44,36 +61,47 @@ export function startCountdown(
 			io.to(roomCode).emit("game-starts-in", remaining);
 		} else {
 			io.to(roomCode).emit("game-started");
-			console.log("Game started");
-			startTimer(roomCode, io, duration);
-			clearInterval(interval);
+			startTimer(roomCode, io, duration, question);
+			clearCountdownInterval(roomCode); // Clear the interval when countdown ends
 		}
 	}, 1000);
+
+	// Set the new interval for the room
+	countdownIntervals[roomCode] = interval;
 }
 
-const roomIntervals: { [roomCode: string]: NodeJS.Timeout } = {};
-
-export const getRoomInterval = (roomCode: string) => {
-	return roomIntervals[roomCode];
+export const clearRoomInterval = (roomCode: string) => {
+	if (roomIntervals[roomCode]) {
+		clearInterval(roomIntervals[roomCode]);
+		delete roomIntervals[roomCode]; // Remove the interval ID from the object
+	}
 };
 
 export function startTimer(
 	roomCode: string,
 	io: Server<ClientToServerEvents, ServerToClientEvents>,
-	duration: number = 60000
+	duration: number = 60000,
+	question: CurrentQuestion
 ) {
 	// Clear the previous timer for the room, if it exists
 	if (roomIntervals[roomCode]) {
 		clearInterval(roomIntervals[roomCode]);
 	}
 
-	const startsAt = new Date().getTime() + duration;
-	console.log("Timer started");
-	io.to(roomCode).emit("round-ends-in", duration);
+	const startsAt = new Date().getTime() + duration + 1000; // Add 1000 ms for the initial delay
+	io.to(roomCode).emit("round-ends-in", duration + 1000); // Adjust for the initial 1-second delay
+
+	let isFirstRun = true;
+
 	const interval = setInterval(() => {
 		const remaining = startsAt - new Date().getTime();
 
-		if (remaining > 0) {
+		if (isFirstRun) {
+			io.to(roomCode).emit("create-question", question);
+			isFirstRun = false;
+			// Adjust the first "round-ends-in" emission to account for the now reduced duration
+			io.to(roomCode).emit("round-ends-in", remaining);
+		} else if (remaining > 0) {
 			io.to(roomCode).emit("round-ends-in", remaining);
 		} else {
 			io.to(roomCode).emit("round-ended");
@@ -84,6 +112,7 @@ export function startTimer(
 	// Store the interval ID for the room's timer
 	roomIntervals[roomCode] = interval;
 }
+
 interface RoomCountries {
 	options: Country[];
 	answers: Country[];
@@ -114,8 +143,6 @@ export function createQuestion(
 			answers: [...newListOfCountries],
 		};
 	}
-
-	console.log(availableCountriesPerRoom[roomId]);
 
 	// Pick four random countries for the options
 	let options: Country[] = [];
