@@ -1,3 +1,25 @@
+@keyframes fade-down {
+	0% {
+		opacity: 0;
+		transform: translateY(-30px) scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px) scale(1);
+	}
+}
+
+@keyframes fade-up {
+	0% {
+		opacity: 0;
+		transform: translateY(30px) scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px) scale(1);
+	}
+}
+
 .gameResult {
 	display: flex;
 	justify-content: space-evenly;
@@ -9,6 +31,7 @@
 
 	&Text {
 		font-size: 5rem;
+		animation: fade-down 0.5s ease-in-out;
 	}
 }
 
@@ -21,6 +44,7 @@
 		justify-content: center;
 		align-items: center;
 		margin-bottom: 2rem;
+		animation: fade-up 0.5s ease-in-out;
 		&Container {
 			display: flex;
 			flex-direction: column;
@@ -53,6 +77,7 @@
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+	animation: fade-up 0.5s ease-in-out;
 }
 
 .playAgainText {

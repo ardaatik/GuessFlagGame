@@ -1,3 +1,25 @@
+@keyframes fade-down {
+	0% {
+		opacity: 0;
+		transform: translateY(-30px) scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px) scale(1);
+	}
+}
+
+@keyframes fade-up {
+	0% {
+		opacity: 0;
+		transform: translateY(30px) scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px) scale(1);
+	}
+}
+
 .singlePlayerResults {
 	background-color: var(--clr-bg-primary);
 	width: 100% !important;
@@ -13,6 +35,8 @@
 		display: flex;
 		flex-direction: column;
 		margin-top: 1.5rem;
+		animation: fade-up 0.5s ease-in-out;
+
 		& > * {
 			width: 36rem;
 			height: 6rem;
@@ -42,6 +66,8 @@
 	height: 25rem;
 	flex-direction: column;
 	text-align: center;
+	animation: fade-up 0.5s ease-in-out;
+
 	&Text {
 		color: #fff;
 		font-size: 6rem;
@@ -87,6 +113,8 @@
 	display: flex;
 	flex-direction: column;
 	height: 22%;
+	animation: fade-down 0.5s ease-in-out;
+
 	&Column {
 		overflow: auto;
 		display: grid;
@@ -106,14 +134,17 @@
 }
 
 .mistakesShowAll {
+	font-weight: bold;
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	font-size: 2rem;
-}
+	transition: all 125ms ease-out;
+	color: var(--clr-typemode-bg) !important;
+	justify-content: center;
+	font-size: 2.5rem;
 
-.IconDownArrow {
-	width: 3rem;
-	height: 3rem;
-	fill: var(--clr-text);
+	&Icon {
+		margin-right: 1rem;
+		width: 2.5rem;
+		height: 2.5rem;
+	}
 }
