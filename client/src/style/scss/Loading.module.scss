@@ -47,8 +47,8 @@
 	width: 10px;
 	height: 10px;
 	border-radius: 5px;
-	background-color: var(--clr-main);
-	color: var(--clr-main);
+	background-color: var(--clr-char-correct);
+	color: var(--clr-char-correct);
 	animation: animationDotFlashing 1s infinite linear alternate;
 	animation-delay: 0.5s;
 }
@@ -64,8 +64,8 @@
 	width: 10px;
 	height: 10px;
 	border-radius: 5px;
-	background-color: var(--clr-main);
-	color: var(--clr-main);
+	background-color: var(--clr-char-correct);
+	color: var(--clr-char-correct);
 	animation: animationDotFlashing 1s infinite alternate;
 	animation-delay: 0s;
 }
@@ -74,15 +74,15 @@
 	width: 10px;
 	height: 10px;
 	border-radius: 5px;
-	background-color: var(--clr-main);
-	color: var(--clr-main);
+	background-color: var(--clr-char-correct);
+	color: var(--clr-char-correct);
 	animation: animationDotFlashing 1s infinite alternate;
 	animation-delay: 1s;
 }
 
 @keyframes animationDotFlashing {
 	0% {
-		background-color: var(--clr-main);
+		background-color: var(--clr-char-correct);
 	}
 	50%,
 	100% {

@@ -2,8 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap");
 
 :root {
-	--clr-caret: orange; // maybe
+	--clr-caret: #ffa500;
 	--clr-main: #fe6969;
+	--clr-main-dark: #fd471f;
 	--clr-tooltip-bg: #000;
 	--clr-char: #ffffff63;
 	--clr-char-correct: #f3f2f2;
@@ -16,7 +17,9 @@
 	--clr-bg-button: linear-gradient(to top, #cdcdcd 50%, #e7e7e7 50%);
 	--clr-text-dark: #121229;
 	--clr-white: #fff;
-	--font-family-default: "Roboto", monospace;
+	--clr-text-darker: #232323;
+	--font-family-default: "Roboto Mono", monospace;
+	--font-weight-regular: 400;
 }
 
 * {
@@ -122,7 +125,7 @@ body {
 	display: flex;
 	line-height: 1.6;
 	min-height: 100vh;
-	font-weight: 500;
+	font-weight: var(--font-weight-regular);
 	justify-content: center;
 	align-items: center;
 	background: url("../assets/images/background.png");

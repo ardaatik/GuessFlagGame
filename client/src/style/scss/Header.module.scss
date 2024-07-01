@@ -30,7 +30,7 @@
 		&--1 {
 			font-size: 25px;
 			font-weight: bold;
-			@media only screen and (max-width: $bp-extra-small) {
+			@media only screen and (max-width: $bp-smallest) {
 				font-size: 20px;
 			}
 		}
@@ -39,7 +39,8 @@
 			text-transform: uppercase;
 			font-weight: bold;
 			padding: 0.5rem 1rem;
-			@media only screen and (max-width: $bp-extra-small) {
+			color: var(--clr-text);
+			@media only screen and (max-width: $bp-smallest) {
 				font-size: 16px;
 			}
 		}
@@ -53,7 +54,7 @@
 		&--1 {
 			width: 25px !important;
 			height: 25px !important;
-			@media only screen and (max-width: $bp-extra-small) {
+			@media only screen and (max-width: $bp-smallest) {
 				width: 20px !important;
 				height: 20px !important;
 			}
@@ -62,7 +63,7 @@
 		&--2 {
 			width: 23px !important;
 			height: 23px !important;
-			@media only screen and (max-width: $bp-extra-small) {
+			@media only screen and (max-width: $bp-smallest) {
 				width: 18px !important;
 				height: 18px !important;
 			}

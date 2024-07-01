@@ -13,7 +13,7 @@
 
 	&Title {
 		color: #fff;
-		font-size: 4.5rem;
+		font-size: 3.8rem;
 		font-weight: bolder;
 		text-align: center;
 	}
@@ -51,10 +51,11 @@
 		justify-content: center;
 		flex-direction: column;
 		min-width: 100%;
+		text-align: center;
 		&Red {
 			flex: 0 0 80%;
 			background-color: #d82227;
-			font-size: 4rem;
+			font-size: 3.5rem;
 			color: #fff;
 			font-weight: 700;
 			margin-bottom: 1rem;
@@ -63,7 +64,10 @@
 			flex: 0 0 80%;
 			background-color: #ffe34a;
 			font-weight: 600;
-			font-size: 2.25rem;
+			font-size: 2.1rem;
+			@media only screen and (max-width: $bp-smallest) {
+				font-size: 2.4rem;
+			}
 		}
 	}
 }
@@ -78,11 +82,19 @@
 	align-items: center;
 	transition: all 175ms ease-in-out;
 
+	@media only screen and (max-width: $bp-smallest) {
+		font-size: 16px;
+	}
+
 	&Icon {
 		height: 3rem;
 		width: 3rem;
 		margin-right: 2rem;
 		fill: var(--clr-tooltip-bg) !important;
+		@media only screen and (max-width: $bp-smallest) {
+			height: 20px;
+			width: 20px;
+		}
 	}
 
 	&Container {

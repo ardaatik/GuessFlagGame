@@ -1,3 +1,5 @@
+@import "base";
+
 .serverErrorMessage {
 	color: var(--clr-char-incorrect);
 	display: flex;
@@ -16,6 +18,9 @@
 	justify-content: center;
 	font-size: 2.5rem;
 	width: 100%;
+	@media only screen and (max-width: $bp-smallest) {
+		height: 30px;
+	}
 }
 
 .inputWrapper {
@@ -33,7 +38,7 @@
 	width: 8em;
 	border: none;
 	background-color: var(--clr-tooltip-bg);
-	height: 90%;
+	height: 100%;
 	width: 100%;
 	border-top-left-radius: 0.8rem;
 	border-bottom-left-radius: 0.8rem;
@@ -41,7 +46,9 @@
 	color: var(--clr-text);
 	padding: 0 3.7rem 0 0.5em;
 	border: 0.1rem solid transparent;
-
+	@media only screen and (max-width: $bp-smallest) {
+		font-size: 2.5rem;
+	}
 	&::placeholder {
 		transition: opacity 100ms;
 		color: var(--clr-text);
@@ -77,11 +84,14 @@
 }
 
 .joinButton {
-	height: 90%;
+	height: 100%;
 	border-radius: 0 0.8rem 0.8rem 0 !important;
 	background-color: var(--clr-tooltip-bg) !important;
 	display: flex;
 	align-items: center;
+	@media only screen and (max-width: $bp-smallest) {
+		font-size: 2.7rem;
+	}
 }
 
 .errorMessage {
