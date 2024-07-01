@@ -1,9 +1,9 @@
-import { CurrentQuestion } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import {
 	ClientToServerEvents,
+	CurrentQuestion,
 	OneVersusOneStateType,
 	ServerToClientEvents,
 } from "../../../typings";
@@ -33,7 +33,6 @@ function useSocketListeners(
 
 	useEffect(() => {
 		const roomStateListener = (roomState: OneVersusOneStateType) => {
-			console.log("updating room state: ", roomState);
 			setRoomState(roomState);
 			setTimer((roomState?.gameOptions?.time ?? 60000) / 1000);
 		};
@@ -46,7 +45,8 @@ function useSocketListeners(
 		const questionChangeListener = (
 			player: "player1" | "player2",
 			score: number,
-			attempts: number
+			attempts: number,
+			guess: string
 		) => {
 			setRoomState((state) => {
 				if (!state) return null;
@@ -61,6 +61,7 @@ function useSocketListeners(
 							attempts,
 							mistakes: attempts - score,
 							answered: true,
+							guess,
 						},
 					},
 				};
@@ -82,7 +83,6 @@ function useSocketListeners(
 					},
 				};
 			});
-			console.log(socket.id, "opponent disconnected");
 		};
 
 		const handleOpponentPlayAgain = () => {
@@ -108,7 +108,6 @@ function useSocketListeners(
 				if (!state) return null;
 
 				// Ensure players exist before setting their 'answered' property
-				console.log("creating question", state);
 
 				if (state?.players?.player1) {
 					state.players.player1.answered = false;
@@ -116,7 +115,6 @@ function useSocketListeners(
 				if (state?.players?.player2) {
 					state.players.player2.answered = false;
 				}
-				console.log("created question", state);
 
 				return {
 					...state,

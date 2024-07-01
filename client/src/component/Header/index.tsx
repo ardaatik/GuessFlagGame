@@ -24,7 +24,6 @@ function Header({ title, className, variant = "1" }: HeaderProps) {
 	const { setRoom, resetTheGame } = useContext(GlobalContext);
 	const { toggleMute, volume } = useContext(GameModeContext);
 	const onLeaveRoom = () => {
-		console.log("leaving room");
 		resetTheGame();
 		socket.emit("leave-room");
 		setRoom("");

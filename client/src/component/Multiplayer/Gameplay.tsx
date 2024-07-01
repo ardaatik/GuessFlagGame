@@ -1,6 +1,6 @@
 import { IconMistake } from "@/style/assets/images";
 import styles from "@/style/scss/Gameplay.module.scss";
-import { CurrentQuestion } from "@/types";
+import { CurrentQuestion } from "../../../../typings";
 import GameButton from "../UI/GameButton";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 

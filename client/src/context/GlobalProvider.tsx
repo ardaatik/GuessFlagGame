@@ -1,6 +1,6 @@
 import socket from "@/socket";
-import { CurrentQuestion } from "@/types";
 import React, { ReactNode, useState } from "react";
+import { CurrentQuestion } from "../../../typings";
 import {
 	GlobalContextInterface,
 	GlobalContextValues,
@@ -70,10 +70,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 				},
 			};
 
-			console.log("newScore", newScore, "newAttempts", newAttempts);
 			socket.emit("question-change", {
 				score: newScore,
 				attempts: newAttempts,
+				guess: guess,
 			});
 
 			return updatedRoomState;

@@ -63,7 +63,6 @@ const GamePlayScreen = () => {
 
 		const onRoundEnded = () => {
 			setTimer(0);
-			console.log("round ended", isAnswered, gameEnded);
 			if (!isAnswered && !gameEnded) {
 				setSelectedAnswer("");
 				guessTheAnswer("");
@@ -122,7 +121,6 @@ const GamePlayScreen = () => {
 	);
 
 	const onLeaveRoom = () => {
-		console.log("leaving room");
 		resetTheGame();
 		setRoomState(null); // causes flicker if opponentState.disconnected is true and the player leaves
 		socket.emit("leave-room");

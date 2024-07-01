@@ -1,4 +1,3 @@
-import { CurrentQuestion, Results } from "@/types";
 import { randomAnswer, randomOptions } from "@/utils/randomSelect";
 import shuffleArray from "@/utils/shuffle";
 import React, {
@@ -8,6 +7,7 @@ import React, {
 	useRef,
 	useState,
 } from "react";
+import { Country, CurrentQuestion, Results } from "../../../typings";
 import countries from "../data/countries.json";
 import {
 	SinglePlayerContextInterface,
@@ -54,16 +54,13 @@ const SinglePlayerProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const initGameRound = () => {
-		let answer, options;
+		let answer: Country, options;
 		// Get random options from full list
 		options = randomOptions(listOfCountriesClone);
 		// Get the answer from filtered list
 		({ answer, options } = randomAnswer(listOfCountries, options));
 
-		console.log("clone : ", listOfCountriesClone);
-
 		const shuffledOptions = shuffleArray(options);
-		console.log(shuffledOptions);
 
 		// remove the random answer selected from the list, to avoid duplicate question
 		setListOfCountries((listOfCountries) => {

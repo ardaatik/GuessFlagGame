@@ -1,9 +1,9 @@
 import useWindowDimensions from "@/hook/useWindowDimensions";
 import { IconDownArrow } from "@/style/assets/images";
 import styles from "@/style/scss/SinglePlayerResults.module.scss";
-import { CurrentQuestion } from "@/types";
 import { useEffect, useState } from "react";
 import ReactConfetti from "react-confetti";
+import { CurrentQuestion } from "../../../../typings";
 import ButtonRounded from "../UI/ButtonRounded";
 import FlagImage from "../UI/FlagImage";
 
@@ -63,12 +63,12 @@ const SinglePlayerResults = ({
 						</div>
 						{mistakenQuestions.length > 3 && (
 							<ButtonRounded
-								variant="2"
+								variant="1"
 								className={styles.mistakesShowAll}
 								onClick={() => setShowAllMistakes(true)}
 							>
 								<span>Show More</span>
-								<IconDownArrow className={styles.IconDownArrow} />
+								<IconDownArrow className={styles.mistakesShowAllIcon} />
 							</ButtonRounded>
 						)}
 					</>

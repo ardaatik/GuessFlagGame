@@ -1,4 +1,4 @@
-import { Country } from "@/types";
+import { Country } from "../../../typings";
 
 const randomOptions = (array: Country[], n: number = 4) => {
 	const result: string[] = [];
@@ -9,7 +9,6 @@ const randomOptions = (array: Country[], n: number = 4) => {
 		if (!randomNumArray.includes(randomNum)) {
 			randomNumArray.push(randomNum);
 			result.push(array[randomNum].name);
-			console.log(randomNum);
 		}
 	}
 
@@ -17,8 +16,6 @@ const randomOptions = (array: Country[], n: number = 4) => {
 };
 
 const randomAnswer = (array: Country[], options: string[]) => {
-	console.log(array);
-
 	let answer: Country;
 	do {
 		const randomNum = Math.floor(Math.random() * array.length);
@@ -31,7 +28,6 @@ const randomAnswer = (array: Country[], options: string[]) => {
 		options[replaceIndex] = answer.name;
 	}
 
-	console.log(answer.name);
 	return { answer, options };
 };
 

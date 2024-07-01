@@ -1,5 +1,9 @@
 import styles from "@/style/scss/FlagImage.module.scss";
-import { FlagImageProps } from "@/types";
+
+export interface FlagImageProps {
+	flagUrl: string;
+	answer: string;
+}
 
 function FlagImage({ flagUrl, answer }: FlagImageProps) {
 	return (

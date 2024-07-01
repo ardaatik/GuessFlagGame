@@ -1,5 +1,10 @@
-import { Country, CurrentQuestion, Results } from "@/types";
-import { OneVersusOneStateType, PlayerState } from "../../../typings";
+import {
+	Country,
+	CurrentQuestion,
+	OneVersusOneStateType,
+	PlayerState,
+	Results,
+} from "../../../typings";
 
 export const defaultPlayerState: PlayerState = {
 	id: "",

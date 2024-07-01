@@ -7,10 +7,13 @@ import { GlobalContext } from "@/context/GlobalProvider";
 import socket from "@/socket";
 import { Icon1v1, IconPlay } from "@/style/assets/images";
 import styles from "@/style/scss/HomeScreen.module.scss";
-import { StartGameInterface } from "@/types";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonRounded from "../component/UI/ButtonRounded";
+
+interface StartGameInterface {
+	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const HomeScreen = ({ setIsLoading }: StartGameInterface) => {
 	const navigate = useNavigate();

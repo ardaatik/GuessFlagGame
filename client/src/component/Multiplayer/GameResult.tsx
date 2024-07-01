@@ -1,10 +1,18 @@
 import { IconRefresh } from "@/style/assets/images";
 import styles from "@/style/scss/GameResult.module.scss";
-import { GameResultInterface } from "@/types";
+import { CurrentQuestion, PlayerState } from "../../../../typings";
 import ButtonRounded from "../UI/ButtonRounded";
 import CardContainer from "../UI/CardContainer";
 import FlagImage from "../UI/FlagImage";
 import ScoreBoard from "./ScoreBoard";
+
+export interface GameResultInterface {
+	currentPlayerState: PlayerState | undefined;
+	opponentPlayerState: PlayerState | undefined;
+	createArrayOfMistake: (mistake: number) => boolean[];
+	mistakenQuestions: CurrentQuestion[];
+	handlePlayAgain: () => void;
+}
 
 const GameResult = ({
 	currentPlayerState,

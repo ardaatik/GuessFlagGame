@@ -17,7 +17,6 @@ const useListOfCountries = (region: GamemodeRegion) => {
 
 	useEffect(() => {
 		updateCountries(region);
-		console.log(region);
 	}, [region]);
 
 	const updateCountries = (selectedRegions: GamemodeRegion) => {
@@ -29,8 +28,6 @@ const useListOfCountries = (region: GamemodeRegion) => {
 				newListOfCountries.push(...countries);
 			}
 		});
-
-		console.log(newListOfCountries);
 
 		setListOfCountries(newListOfCountries);
 
