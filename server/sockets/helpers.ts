@@ -11,10 +11,7 @@ import {
 } from "../../typings";
 
 const countriesByRegion: any = JSON.parse(
-	fs.readFileSync(
-		path.resolve(__dirname, "../../client/src/data/countries.json"),
-		"utf-8"
-	)
+	fs.readFileSync(path.resolve(__dirname, "../../data/countries.json"), "utf-8")
 );
 
 export function generateCode(length: number) {

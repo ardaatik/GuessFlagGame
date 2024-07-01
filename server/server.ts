@@ -15,7 +15,7 @@ app.use(
 			process.env.NODE_ENV === "development" ? "http://localhost:3000" : "",
 	})
 );
-app.use(express.static(path.join(__dirname, "./client-build")));
+app.use(express.static(path.join(__dirname, "../client-build")));
 
 console.log(`Attempting to run server on port ${port}`);
 
@@ -24,5 +24,5 @@ configureSockets(server);
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {
-	res.sendFile(path.join(__dirname, "./client-build/index.html"));
+	res.sendFile(path.join(__dirname, "../client-build/index.html"));
 });
