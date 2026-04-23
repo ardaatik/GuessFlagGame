@@ -6,6 +6,8 @@ WORKDIR /app
 COPY client/package*.json ./client/
 RUN cd client && npm ci
 COPY client/ ./client/
+# Resolves `../../../typings` imports from client/src (see typings.d.ts at repo root)
+COPY typings.d.ts ./
 # Vite writes to ../server/client-build (see client/vite.config.ts)
 RUN mkdir -p server && cd client && npm run build
 
