@@ -26,6 +26,7 @@
 		"vite-plugin-svgr": "^4.2.0"
 	},
 	"devDependencies": {
+		"@types/node": "^20.12.7",
 		"@types/random-seed": "^0.3.4",
 		"@types/react": "^18.2.35",
 		"@types/react-dom": "^18.2.14",
