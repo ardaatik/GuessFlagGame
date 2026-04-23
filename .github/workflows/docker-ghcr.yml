@@ -4,10 +4,7 @@ name: Docker publish (GHCR)
 
 on:
   push:
-    branches: [main, master]
-    tags: ["v*"]
-  pull_request:
-    branches: [main, master]
+    branches: [ dev ]
   workflow_dispatch:
 
 env:
