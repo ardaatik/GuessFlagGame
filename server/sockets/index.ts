@@ -23,7 +23,7 @@ export default function configure(s: HttpServer) {
 	const io = new Server<ClientToServerEvents, ServerToClientEvents>(s, {
 		cors: {
 			origin:
-				process.env.NODE_ENV === "development" ? "http://localhost:5173" : "",
+				process.env.NODE_ENV === "development" ? "http://localhost:5173" : true,
 			methods: ["GET", "POST"],
 			allowedHeaders: ["my-custom-header"],
 			credentials: true,
@@ -251,7 +251,8 @@ export default function configure(s: HttpServer) {
 		});
 	});
 
-	s.listen(3000, () => {
-		console.log(`Server running on port 3000`);
+	const port = Number(process.env.PORT) || 3000;
+	s.listen(port, () => {
+		console.log(`Server running on port ${port}`);
 	});
 }
