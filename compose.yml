@@ -1,0 +1,31 @@
+# Standalone Guess the Flag stack for Docker Swarm + Traefik.
+# Requires the external overlay network `traefik-public`.
+
+services:
+  guesstheflag:
+    image: ghcr.io/ardaatik/guessflaggame:${GIT_COMMIT_HASH:-latest}
+    environment:
+      NODE_ENV: production
+      PORT: "${GUESSTHEFLAG_CONTAINER_PORT:-3000}"
+    networks:
+      - traefik-public
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.http.routers.guesstheflag.rule=Host(`${GUESSTHEFLAG_DOMAIN:-guesstheflag.ardaatik.fun}`)
+        - traefik.http.routers.guesstheflag.entrypoints=websecure
+        - traefik.http.routers.guesstheflag.tls.certresolver=letsencrypt
+        - traefik.http.routers.guesstheflag.tls.domains[0].main=${GUESSTHEFLAG_DOMAIN:-guesstheflag.ardaatik.fun}
+        - traefik.http.services.guesstheflag.loadbalancer.server.port=${GUESSTHEFLAG_CONTAINER_PORT:-3000}
+
+networks:
+  traefik-public:
+    external: true
