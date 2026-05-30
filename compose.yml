@@ -20,10 +20,10 @@ services:
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
-        - traefik.http.routers.guesstheflag.rule=Host(`${GUESSTHEFLAG_DOMAIN:-guesstheflag.ardaatik.fun}`)
+        - traefik.http.routers.guesstheflag.rule=Host(`${GUESSTHEFLAG_DOMAIN:-guesstheflag.ardaatik.com}`)
         - traefik.http.routers.guesstheflag.entrypoints=websecure
         - traefik.http.routers.guesstheflag.tls.certresolver=letsencrypt
-        - traefik.http.routers.guesstheflag.tls.domains[0].main=${GUESSTHEFLAG_DOMAIN:-guesstheflag.ardaatik.fun}
+        - traefik.http.routers.guesstheflag.tls.domains[0].main=${GUESSTHEFLAG_DOMAIN:-guesstheflag.ardaatik.com}
         - traefik.http.services.guesstheflag.loadbalancer.server.port=${GUESSTHEFLAG_CONTAINER_PORT:-3000}
 
 networks:
